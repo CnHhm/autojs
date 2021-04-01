@@ -12,8 +12,10 @@ if (!requestScreenCapture()) {
     toast("请求截图失败");
     exit();
 }
+var src = images.read("/sdcard/hhmfile/3.png");
 var imgScreen = captureScreen();//请求截取当前屏幕
-var logOcr= Baidu_ocr(imgScreen);
+var imgClip = images.clip(src, 457, 273, 496, 398);
+var logOcr= Baidu_ocr(imgClip);
 log(logOcr);
 var wordResult=logOcr.words_result;
 var count=0;
@@ -21,10 +23,13 @@ wordResult.forEach(element => {
     count++;
     log(count+":"+element.words);
 });
+
+
+
 //调用百度文字识别ocr得到当前手机截屏文字
 function Baidu_ocr(imgFile){
     log("调用百度ocr开始识图");
-    //var imag64 = images.toBase64(imgFile);//转换截屏图片
+    // var imag64 = images.toBase64(imgFile);//转换截屏图片
     var imag64 = images.toBase64(imgFile, "png", 100);//转换截屏图片
     //log(imag64.string());
     //该APIKey和Secret为"这是谁的爽歪歪"所有
@@ -37,6 +42,7 @@ function Baidu_ocr(imgFile){
         client_id: API_Key,
         client_secret: Secret_Key,
     });
+    log("调用百度ocr开始识图1");
     var access_token=token_Res.body.json().access_token;
     //通用文字识别，50000次/天免费
     var ocrUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic";
@@ -48,6 +54,7 @@ function Baidu_ocr(imgFile){
         image: imag64,
         language_type:"CHN_ENG"
     });
+    log("调用百度ocr开始识图2");
     var json = ocr_Res.body.json();
     //log(json);
     return json;
