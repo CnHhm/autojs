@@ -12,17 +12,21 @@ if (!requestScreenCapture()) {
     toast("请求截图失败");
     exit();
 }
-var src = images.read("/sdcard/hhmfile/3.png");
+// var src = images.read("/sdcard/hhmfile/3.png");
+
 var imgScreen = captureScreen();//请求截取当前屏幕
-var imgClip = images.clip(src, 457, 273, 496, 398);
-var logOcr= Baidu_ocr(imgClip);
-log(logOcr);
-var wordResult=logOcr.words_result;
-var count=0;
-wordResult.forEach(element => {
-    count++;
-    log(count+":"+element.words);
-});
+images.saveImage(imgScreen, "/sdcard/hhmfile/test.png");
+// 回收图片
+imgScreen.recycle();
+// var imgClip = images.clip(src, 457, 273, 496, 398);
+// var logOcr= Baidu_ocr(imgClip);
+// log(logOcr);
+// var wordResult=logOcr.words_result;
+// var count=0;
+// wordResult.forEach(element => {
+//     count++;
+//     log(count+":"+element.words);
+// });
 
 
 
