@@ -4,43 +4,25 @@
 // }
 
 // var img = captureScreen();
-//images.saveImage(img, "/sdcard/hhmfile/物品栏3.png");
-
-// //拆分20个道具栏
-// var src = images.read("/sdcard/hhmfile/物品栏3.png");
-var x = 1050;
-var y = 265;
-// for (var i = x; i < 1700; i = i + 130 ) {
-//     for (var j = y; j < 785; j+=130 ) {
-//         var imgClip = images.clip(src, Number(i), Number(j), 130, 130);
-//         log(i+"-"+j);
-//         images.saveImage(imgClip, "/sdcard/hhmfile/clip"+i+"-"+j+".png");
-//         // imgClip.recycle();
-//     }
-// }
-
-// src.recycle();
-
-var x_touch = x + 65;
-var y_touch = y + 65;
-for (var m = 0; m < 5; m++) {
-    for (var n = 0; n < 4; n++) {
-        click(x_touch,y_touch);
-        log("x:"+x_touch+";"+"y:"+y_touch);
-        sleep(500);
-        y_touch+=130;
-    }
-    y_touch = y + 65;
-    x_touch+=130;
-}
+// images.saveImage(img, "/sdcard/hhmfile/道具10.png");
+var img1 = images.read("/sdcard/hhmfile/道具6.png");
+var img2 = images.read("/sdcard/hhmfile/道具9.png");
+var imgClip1 = images.clip(img1, 785, 865, 80, 45);
+var imgClip2 = images.clip(img2, 785, 865, 80, 45);
+images.saveImage(imgClip1, "/sdcard/hhmfile/imgClip1.png");
+images.saveImage(imgClip2, "/sdcard/hhmfile/imgClip2.png");
+log("一,二:"+images.getSimilarity(imgClip1, imgClip2, {
+    "type": "PNSR"
+}));
 
 // //图片相似度比较
 // var img1 = images.read("/sdcard/hhmfile/clip1050-655.png");
 // var img2 = images.read("/sdcard/hhmfile/clip1050-655.png");
 // log(images.getSimilarity(img1, img2, {
-//     "type": "PNSR"
+//     "type": "PNSR"//MSSIM
 // }));
-// img1.recycle();
-// img2.recycle();
-
+img1.recycle();
+img2.recycle();
+imgClip1.recycle();
+imgClip2.recycle();
 log("finsh;");
