@@ -140,6 +140,7 @@ function screencapture(x,y,index){
         } else if ((count == 1) && (element.words == "飞行符")) {
             log("是飞行符");
         }
+        //每张地图的map x,y 输入框位置不同
         if ((count == 4)) {
             if(element.words.match("普陀山")) {
                 log ("是普陀山的宝图");
