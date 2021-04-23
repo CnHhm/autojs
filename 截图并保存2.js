@@ -42,7 +42,7 @@ function Baidu_ocr(imgFile){
 
 
 var flag = 1;
-function screencapture(x,y){
+function screencapture(){
     if (flag) {
         if (!requestScreenCapture()) {
             toast("请求截图失败");
@@ -52,18 +52,19 @@ function screencapture(x,y){
         }
     }
     var img = captureScreen();
-    var imgClip = images.clip(img, 440, 266, 518, 632);
-    var logOcr= Baidu_ocr(imgClip);
-    log(logOcr);
-    var wordResult=logOcr.words_result;
-    var count=0;
-    wordResult.forEach(element => {
-        count++;
-        log(count+":"+element.words);
-    });
+    images.saveImage(img, "/sdcard/hhmfile/江南野外y"+".png");
+    // var imgClip = images.clip(img, 440, 266, 518, 632);
+    // var logOcr= Baidu_ocr(imgClip);
+    // log(logOcr);
+    // var wordResult=logOcr.words_result;
+    // var count=0;
+    // wordResult.forEach(element => {
+    //     count++;
+    //     log(count+":"+element.words);
+    // });
     
-    images.saveImage(img, "/sdcard/hhmfile/物品栏"+x+"-"+y+".png");
-    imgClip.recycle();
+    // images.saveImage(img, "/sdcard/hhmfile/物品栏"+x+"-"+y+".png");
+    // imgClip.recycle();
     img.recycle();
 }
 
@@ -100,8 +101,8 @@ function myFunction()
     }
 }
 // sleep(20000);
-myFunction();
-
+// myFunction();
+screencapture();
 // //图片相似度比较
 // var img1 = images.read("/sdcard/hhmfile/clip1050-655.png");
 // var img2 = images.read("/sdcard/hhmfile/clip1050-655.png");

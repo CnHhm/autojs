@@ -82,8 +82,8 @@ var y_touch = y + 65;
 function myFunction()
 {
     index = 0;
-    for (var m = 0; m < 3; m++) {
-        for (var n = 0; n < 4; n++) {
+    for (var m = 0; m < 1; m++) {
+        for (var n = 0; n < 1; n++) {
             click(x_touch,y_touch);
             log("x:"+x_touch+";"+"y:"+y_touch);
             sleep(500);
@@ -137,11 +137,17 @@ function screencapture(x,y,index){
         if ((count == 1) && (element.words == "藏宝图")) {
             mapTypeEnum0 = mapTypeEnum.TreasureMap;
             log("是宝图");
+        } else if ((count == 1) && (element.words == "飞行符")) {
+            log("是飞行符");
         }
         if ((count == 4)) {
             if(element.words.match("普陀山")) {
                 log ("是普陀山的宝图");
             }
+            var front = element.words.indexOf("(");
+            var mid = element.words.indexOf(",");
+            var raer = element.words.indexOf(")");
+            log("坐标：("+element.words.slice(front,mid)+","+element.words.slice(mid+1,raer)+")")
             switch(element.words){
                 case("1"):
                     ;
