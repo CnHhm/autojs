@@ -79,13 +79,16 @@ var x = 1050;
 var y = 265;
 var x_touch = x + 65;
 var y_touch = y + 65;
+var arrayX = [1050,1050+65,1050+65*2,1050+65*3,1050+65*4];
+var arrayY = [265,265+65,265+65*2,265+65*3,265+65*4];
+var items = new Array();
 function myFunction()
 {
     index = 0;
-    for (var m = 0; m < 1; m++) {
-        for (var n = 0; n < 1; n++) {
+    for (var m = 0; m < 5; m++) {
+        for (var n = 0; n < 4; n++) {
             click(x_touch,y_touch);
-            log("x:"+x_touch+";"+"y:"+y_touch);
+            // log("x:"+x_touch+";"+"y:"+y_touch);
             sleep(500);
             screencapture(m,n,index);
             sleep(500);
@@ -139,23 +142,72 @@ function screencapture(x,y,index){
             log("是宝图");
         } else if ((count == 1) && (element.words == "飞行符")) {
             log("是飞行符");
+            mapTypeEnum0 = mapTypeEnum.Empty;
+        } else if (count == 1) {
+            mapTypeEnum0 = mapTypeEnum.Empty;
         }
-        //每张地图的map x,y 输入框位置不同
-        if ((count == 4)) {
-            if(element.words.match("普陀山")) {
-                log ("是普陀山的宝图");
+        if ((count == 4) && (mapTypeEnum0 == mapTypeEnum.TreasureMap)) {
+            if(element.words.match("建邺城")) {
+                PlaceEnum0 = PlaceEnum.JY;
+                log ("是建邺城的宝图");
+            } else if (element.words.match("东海湾")){
+                PlaceEnum0 = PlaceEnum.DHW;
+                log ("是东海湾的宝图");
+            } else if (element.words.match("江南野外")){
+                PlaceEnum0 = PlaceEnum.JN;
+                log ("是江南野外的宝图");                
+            } else if (element.words.match("傲来国")){
+                PlaceEnum0 = PlaceEnum.AL;
+                log ("是傲来国的宝图");
+            } else if (element.words.match("女儿村")){
+                PlaceEnum0 = PlaceEnum.NE;
+                log ("是女儿村的宝图");
+            } else if (element.words.match("花果山")){
+                PlaceEnum0 = PlaceEnum.HG;
+                log ("是花果山的宝图");
+            } else if (element.words.match("大唐国境")){
+                PlaceEnum0 = PlaceEnum.DTJW;
+                log ("是大唐国境的宝图");
+            } else if (element.words.match("长寿郊外")){
+                PlaceEnum0 = PlaceEnum.DTGJ;
+                log ("是长寿郊外的宝图");
+            } else if (element.words.match("北俱芦洲")){
+                PlaceEnum0 = PlaceEnum.BJ;
+                log ("是北俱芦洲的宝图");
+            } else if (element.words.match("朱紫国")){
+                PlaceEnum0 = PlaceEnum.ZZ;
+                log ("是朱紫国的宝图");
+            } else if (element.words.match("狮驼岭")){
+                PlaceEnum0 = PlaceEnum.STL;
+                log ("是狮驼岭的宝图");
+            } else if (element.words.match("墨家村")){
+                PlaceEnum0 = PlaceEnum.MJ;
+                log ("是墨家村的宝图");
+            } else if (element.words.match("五庄观")){
+                PlaceEnum0 = PlaceEnum.WZ;
+                log ("是五庄观的宝图");
+            } else if (element.words.match("大唐境外")){
+                PlaceEnum0 = PlaceEnum.DTJW;
+                log ("是大唐境外的宝图");
+            } else if (element.words.match("麒麟山")){
+                PlaceEnum0 = PlaceEnum.QLS;
+                log ("是麒麟山的宝图");
             }
-            var front = element.words.indexOf("(");
-            var mid = element.words.indexOf(",");
-            var raer = element.words.indexOf(")");
-            log("坐标：("+element.words.slice(front,mid)+","+element.words.slice(mid+1,raer)+")")
-            switch(element.words){
-                case("1"):
-                    ;
-                break;
+            if ((mapTypeEnum0 == mapTypeEnum.TreasureMap)) {
+                var front = element.words.indexOf("(");
+                var mid = element.words.indexOf(",");
+                var raer = element.words.indexOf(")");
+                log("yuan:"+element.words);
+                log("front:"+front+";mid:"+mid+";raer:"+raer+";");
+                log("坐标：("+element.words.slice(front,mid)+","+element.words.slice(mid+1,raer)+")")
+                switch(element.words){
+                    case("1"):
+                        ;
+                    break;
+                }
             }
         }
-        log(count+":"+element.words);
+        // log(count+":"+element.words); //百度ocrlog
     });
     var temp = new popr(mapTypeEnum0,PlaceEnum0,axisX,axisY,position);//popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
     images.saveImage(img, "/sdcard/hhmfile/物品栏"+index+".png");
@@ -165,7 +217,7 @@ function screencapture(x,y,index){
 
 //调用百度文字识别ocr得到当前手机截屏文字
 function Baidu_ocr(imgFile){
-    log("调用百度ocr开始识图");
+    // log("调用百度ocr开始识图");
     // var imag64 = images.toBase64(imgFile);//转换截屏图片
     var imag64 = images.toBase64(imgFile, "png", 100);//转换截屏图片
     //log(imag64.string());
