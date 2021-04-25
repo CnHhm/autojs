@@ -108,6 +108,12 @@ images.saveImage(imgScreen, "/sdcard/hhmfile/开屏界面"+".png");
 // click(1799,73);//签到栏关闭坐标
 // click(2013,1013);//打开道具
 myFunction();
+for (var array_i = 0; array_i < items.length; array_i++) {
+    log("w:"+items[array_i].mapTypeEnum);
+    if (items[array_i].mapTypeEnum == mapTypeEnum.TreasureMap) {
+        log(array_i+":是宝图");
+    }
+}
 // var logOcr= Baidu_ocr(imgScreen);
 // log(logOcr);
 // var test = new Position(mapTypeEnum.Empty,PlaceEnum.JY,11,2);
@@ -137,16 +143,23 @@ function screencapture(x,y,index){
     log("************"+index+"************");
     wordResult.forEach(element => {
         count++;
-        if ((count == 1) && (element.words == "藏宝图")) {
-            mapTypeEnum0 = mapTypeEnum.TreasureMap;
-            log("是宝图");
-        } else if ((count == 1) && (element.words == "飞行符")) {
-            log("是飞行符");
-            mapTypeEnum0 = mapTypeEnum.Empty;
-        } else if (count == 1) {
-            mapTypeEnum0 = mapTypeEnum.Empty;
-        }
-        if ((count == 4) && (mapTypeEnum0 == mapTypeEnum.TreasureMap)) {
+        if(count == 1) {    //第一行词条
+            if (element.words == "藏宝图") {
+                mapTypeEnum0 = mapTypeEnum.TreasureMap;
+            } else {
+                mapTypeEnum0 = mapTypeEnum.Props;
+            }
+        } else if 
+        // if ((count == 1) && (element.words == "藏宝图")) {
+        //     mapTypeEnum0 = mapTypeEnum.TreasureMap;
+        //     log("是宝图");
+        // } else if ((count == 1) && (element.words == "飞行符")) {
+        //     log("是飞行符");
+        //     mapTypeEnum0 = mapTypeEnum.Empty;
+        // } else if (count == 1) {
+        //     mapTypeEnum0 = mapTypeEnum.Empty;
+        // }
+         ((count == 4) && (mapTypeEnum0 == mapTypeEnum.TreasureMap)) {
             if(element.words.match("建邺城")) {
                 PlaceEnum0 = PlaceEnum.JY;
                 log ("是建邺城的宝图");
@@ -199,7 +212,7 @@ function screencapture(x,y,index){
                 var raer = element.words.indexOf(")");
                 log("yuan:"+element.words);
                 log("front:"+front+";mid:"+mid+";raer:"+raer+";");
-                log("坐标：("+element.words.slice(front,mid)+","+element.words.slice(mid+1,raer)+")")
+                log("坐标：("+element.words.slice(front+1,mid)+","+element.words.slice(mid+1,raer)+")")
                 switch(element.words){
                     case("1"):
                         ;
@@ -210,6 +223,8 @@ function screencapture(x,y,index){
         // log(count+":"+element.words); //百度ocrlog
     });
     var temp = new popr(mapTypeEnum0,PlaceEnum0,axisX,axisY,position);//popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
+    log("push:"+temp.mapTypeEnum0);
+    items.push(temp);
     images.saveImage(img, "/sdcard/hhmfile/物品栏"+index+".png");
     // images.recycle();
     img.recycle();
