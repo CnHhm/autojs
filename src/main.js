@@ -85,7 +85,7 @@ var items = new Array();
 function myFunction()
 {
     index = 0;
-    for (var m = 0; m < 1; m++) {
+    for (var m = 0; m < 5; m++) {
         for (var n = 0; n < 4; n++) {
             click(x_touch,y_touch);
             // log("x:"+x_touch+";"+"y:"+y_touch);
@@ -100,6 +100,90 @@ function myFunction()
     }
 }
 
+function dig(location,x1,y1,x2,y2)
+{
+    log("开始挖图");
+    log("location:"+location);
+    switch (location) {
+        case PlaceEnum.CSJW://123,120
+            log("去建业挖图");
+            click(1634,334);//1634,334-飞行符坐标
+            sleep(500);
+            click(828,608);//828，608 使用飞行符
+            sleep(500);
+            click(1361,647);//去建业 1361，647
+            sleep(500);
+            click(1723,100);//关闭道具栏
+            sleep(500);
+            click(64,83);//打开地图
+            sleep(500);
+            click(570,145);//输入x
+            sleep(500);
+            click(547,319);///547,319
+            sleep(500);
+            click(686,314);///686,314
+            sleep(500);
+            click(830,313);///830,313
+            sleep(500);
+            click(775,139);//输入y
+            sleep(500);
+            click(775,139);//输入y
+            sleep(500);
+            // click(547,319);///547,319
+            // sleep(500);
+            // click(686,314);///686,314
+            // sleep(500);
+            // click(997,452);///997,452
+            sleep(1000);
+            click(968,141);//968,141 前往
+        break;
+        case PlaceEnum.DHW:
+            ;//1236,329-AL国旗坐标
+        break;
+        case PlaceEnum.JN:
+            ;
+        break;
+        case PlaceEnum.AL:
+            ;
+        break;
+        case PlaceEnum.NE:
+            ;
+        break;
+        case PlaceEnum.HG:
+            ;
+        break;
+        case PlaceEnum.DTGJ:
+            ;
+        break;
+        case PlaceEnum.PT:
+            ;
+        break;
+        case PlaceEnum.CSJW:
+            ;
+        break;
+        case PlaceEnum.BJ:
+            ;
+        break;
+        case PlaceEnum.ZZ:
+            ;
+        break;
+        case PlaceEnum.STL:
+            ;
+        break;
+        case PlaceEnum.MJ:
+            ;
+        break;
+        case PlaceEnum.WZ:
+            ;
+        break;
+        case PlaceEnum.DTJW:
+            ;
+        break;
+        case PlaceEnum.QLS:
+            ;
+        break;
+    }
+}
 var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
 log("begin");
 var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
@@ -108,12 +192,35 @@ images.saveImage(imgScreen, "/sdcard/hhmfile/开屏界面"+".png");
 // click(1799,73);//签到栏关闭坐标
 // click(2013,1013);//打开道具
 myFunction();
-for (var array_i = 0; array_i < items.length; array_i++) {
-    log("w:"+items[array_i].mapTypeEnum);
-    if (items[array_i].mapTypeEnum == mapTypeEnum.TreasureMap) {
-        log(array_i+":是宝图");
+
+var x2 = 1050;
+var y2 = 265;
+var x_touch2 = x2 + 65;
+var y_touch2 = y2 + 65;
+
+for (var m = 0, array_i = 0; m < 1; m++) {
+    for (var n = 0; n < 4; n++) {
+        // log("items.length:"+items.length);
+        if (array_i < items.length-1) ++array_i;
+        // log("array："+array_i);
+        if (items[array_i].type == mapTypeEnum.TreasureMap) {
+            log("去"+items[array_i].PlaceEnum+"("+items[array_i].axisX+","+items[array_i].axisY+")挖图");
+            dig(items[array_i].PlaceEnum,items[array_i].axisX,items[array_i].axisY,x_touch2,y_touch2);
+        }
+        sleep(1000);
+        y_touch2+=130;
     }
+    y_touch2 = y2 + 65;
+    x_touch2+=130;
 }
+
+// for (var array_i = 0; array_i < items.length; array_i++) {
+//     // log("道具栏:"+items[array_i].type);
+//     if (items[array_i].type == mapTypeEnum.TreasureMap) {
+//         log(array_i+":是宝图,"+"地点在:"+items[array_i].PlaceEnum+"坐标在：("+items[array_i].axisX+","+items[array_i].axisY+")");
+//         dig(loacation,axis_x,axis_y);
+//     }
+// }
 // var logOcr= Baidu_ocr(imgScreen);
 // log(logOcr);
 // var test = new Position(mapTypeEnum.Empty,PlaceEnum.JY,11,2);
@@ -182,7 +289,7 @@ function screencapture(x,y,index){
                 PlaceEnum0 = PlaceEnum.DTJW;
                 log ("是大唐国境的宝图");
             } else if (element.words.match("长寿郊外")){
-                PlaceEnum0 = PlaceEnum.DTGJ;
+                PlaceEnum0 = PlaceEnum.CSJW;
                 log ("是长寿郊外的宝图");
             } else if (element.words.match("北俱芦洲")){
                 PlaceEnum0 = PlaceEnum.BJ;
@@ -213,6 +320,8 @@ function screencapture(x,y,index){
                 log("yuan:"+element.words);
                 log("front:"+front+";mid:"+mid+";raer:"+raer+";");
                 log("坐标：("+element.words.slice(front+1,mid)+","+element.words.slice(mid+1,raer)+")")
+                axisX = Number(element.words.slice(front+1,mid));
+                axisY = Number(element.words.slice(mid+1,raer));
                 switch(element.words){
                     case("1"):
                         ;
@@ -223,9 +332,6 @@ function screencapture(x,y,index){
         // log(count+":"+element.words); //百度ocrlog
     });
     var temp = new popr(mapTypeEnum0,PlaceEnum0,axisX,axisY,position);//popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
-    //这个构造函数不知道为什么不生效，先手动赋值
-    temp.mapTypeEnum = mapTypeEnum0;
-    log("push:"+temp.mapTypeEnum0);
     items.push(temp);
     images.saveImage(img, "/sdcard/hhmfile/物品栏"+index+".png");
     // images.recycle();
