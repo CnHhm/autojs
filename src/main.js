@@ -85,7 +85,7 @@ var items = new Array();
 function myFunction()
 {
     index = 0;
-    for (var m = 0; m < 5; m++) {
+    for (var m = 0; m < 1; m++) {
         for (var n = 0; n < 4; n++) {
             click(x_touch,y_touch);
             // log("x:"+x_touch+";"+"y:"+y_touch);
@@ -223,6 +223,8 @@ function screencapture(x,y,index){
         // log(count+":"+element.words); //百度ocrlog
     });
     var temp = new popr(mapTypeEnum0,PlaceEnum0,axisX,axisY,position);//popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
+    //这个构造函数不知道为什么不生效，先手动赋值
+    temp.mapTypeEnum = mapTypeEnum0;
     log("push:"+temp.mapTypeEnum0);
     items.push(temp);
     images.saveImage(img, "/sdcard/hhmfile/物品栏"+index+".png");
