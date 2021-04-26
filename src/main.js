@@ -74,6 +74,36 @@ function popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
  *   背包道具框类定义 end
  */
 
+
+/**
+ * 道具栏点击的相对位置配置 begin
+ */
+var bagSpotX = new Array();
+var bagSpotY = new Array();
+bagSpotX[0] = 1; bagSpotY[0] = 1;
+bagSpotX[1] = 1; bagSpotY[1] = 1;
+bagSpotX[2] = 1; bagSpotY[2] = 1;
+bagSpotX[3] = 1; bagSpotY[3] = 1;
+bagSpotX[4] = 1; bagSpotY[4] = 1;
+bagSpotX[5] = 1; bagSpotY[5] = 1;
+bagSpotX[6] = 1; bagSpotY[6] = 1;
+bagSpotX[7] = 1; bagSpotY[7] = 1;
+bagSpotX[8] = 1; bagSpotY[8] = 1;
+bagSpotX[9] = 1; bagSpotY[9] = 1;
+bagSpotX[10] = 1; bagSpotY[10] = 1;
+bagSpotX[11] = 1; bagSpotY[11] = 1;
+bagSpotX[12] = 1; bagSpotY[12] = 1;
+bagSpotX[13] = 1; bagSpotY[13] = 1;
+bagSpotX[14] = 1; bagSpotY[14] = 1;
+bagSpotX[15] = 1; bagSpotY[15] = 1;
+bagSpotX[16] = 1; bagSpotY[16] = 1;
+bagSpotX[17] = 1; bagSpotY[17] = 1;
+bagSpotX[18] = 1; bagSpotY[18] = 1;
+bagSpotX[19] = 1; bagSpotY[19] = 1;
+/**
+ * 道具栏点击的相对位置配置 end
+ */
+
 //遍历道具栏
 var x = 1050;
 var y = 265;
@@ -100,6 +130,20 @@ function myFunction()
     }
 }
 
+var clickType = {
+    axis: 1,
+    spot: 2,
+  };
+
+function clickDelay(clickType,x,y,spot,ms){
+    if(clickType == clickType.axis) {
+        click(x,y);
+        sleep(ms);
+    } else if (clickType == clickType.spot) {
+
+    }
+
+}
 function dig(location,x1,y1,x2,y2)
 {
     log("开始挖图");
@@ -184,6 +228,8 @@ function dig(location,x1,y1,x2,y2)
         break;
     }
 }
+
+//main
 var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
 log("begin");
 var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
@@ -191,6 +237,7 @@ images.saveImage(imgScreen, "/sdcard/hhmfile/开屏界面"+".png");
 //如果有签到栏关闭签到栏 
 // click(1799,73);//签到栏关闭坐标
 // click(2013,1013);//打开道具
+
 myFunction();
 
 var x2 = 1050;
@@ -214,21 +261,6 @@ for (var m = 0, array_i = 0; m < 1; m++) {
     x_touch2+=130;
 }
 
-// for (var array_i = 0; array_i < items.length; array_i++) {
-//     // log("道具栏:"+items[array_i].type);
-//     if (items[array_i].type == mapTypeEnum.TreasureMap) {
-//         log(array_i+":是宝图,"+"地点在:"+items[array_i].PlaceEnum+"坐标在：("+items[array_i].axisX+","+items[array_i].axisY+")");
-//         dig(loacation,axis_x,axis_y);
-//     }
-// }
-// var logOcr= Baidu_ocr(imgScreen);
-// log(logOcr);
-// var test = new Position(mapTypeEnum.Empty,PlaceEnum.JY,11,2);
-// var storage = storages.create("hhm:localStorage");
-// storage.put("positionA", test);
-// storage.put("positionB", 666);
-// log("positionA = "+ storage.get("positionA").Postion);
-// storage.clear();
 
 //点开道具栏
 log("end");
