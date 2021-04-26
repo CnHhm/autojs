@@ -115,7 +115,7 @@ var items = new Array();
 function myFunction()
 {
     index = 0;
-    for (var m = 0; m < 5; m++) {
+    for (var m = 0; m < 1; m++) {
         for (var n = 0; n < 4; n++) {
             click(x_touch,y_touch);
             // log("x:"+x_touch+";"+"y:"+y_touch);
@@ -152,34 +152,7 @@ function dig(location,x1,y1,x2,y2)
         case PlaceEnum.CSJW://123,120
             log("去建业挖图");
             click(1634,334);//1634,334-飞行符坐标
-            sleep(500);
-            click(828,608);//828，608 使用飞行符
-            sleep(500);
-            click(1361,647);//去建业 1361，647
-            sleep(500);
-            click(1723,100);//关闭道具栏
-            sleep(500);
-            click(64,83);//打开地图
-            sleep(500);
-            click(570,145);//输入x
-            sleep(500);
-            click(547,319);///547,319
-            sleep(500);
-            click(686,314);///686,314
-            sleep(500);
-            click(830,313);///830,313
-            sleep(500);
-            click(775,139);//输入y
-            sleep(500);
-            click(775,139);//输入y
-            sleep(500);
-            // click(547,319);///547,319
-            // sleep(500);
-            // click(686,314);///686,314
-            // sleep(500);
-            // click(997,452);///997,452
-            sleep(1000);
-            click(968,141);//968,141 前往
+            sleep(random(500, 1200));
         break;
         case PlaceEnum.DHW:
             ;//1236,329-AL国旗坐标
@@ -228,38 +201,71 @@ function dig(location,x1,y1,x2,y2)
         break;
     }
 }
+/**
+ * 1.到长安城宝石商人固定坐标处
+ * 2.点击系统项->点击基础->点击常用设置->点击查看附近摊位
+ * 3.固定点击第一个摊位进入摊位模式
+ * 4.点击更多摊位
+ * 5.点击第一个摊位，判断第一个物品是否是宝图，判断价格是否能购买
+ * 6.如果不是宝图则点下一个摊位
+ * 7.
+ */
+function purchase(){
+    //去宝石商人处
+    var Screen = captureScreen();
+    var iconForjudge = images.clip(Screen, 1967, 963, 80, 92);
+    var iconForjudge2 = images.clip(Screen, 1956, 963, 80, 92);
+    // images.saveImage(iconForjudge, "/sdcard/hhmfile/道具"+".png");
+    img2 = images.read("/sdcard/hhmfile/道具.png");
+    log("similar:"+images.getSimilarity(iconForjudge, img2, {"type": "MSSIM"}));
+    log("similar2:"+images.getSimilarity(iconForjudge2, img2, {"type": "MSSIM"}));
 
+    // var img = images.read("/sdcard/大图.png");
+    // var templ = images.read("/sdcard/小图.png");
+    // var p = findImage(img, templ);
+    // if(p){
+    //     toast("找到啦:" + p);
+    // }else{
+    //     toast("没找到");
+    // }
+
+    img2.recycle();
+    Screen.recycle();
+    iconForjudge.recycle();
+    iconForjudge2.recycle();
+
+}
 //main
+auto.waitFor();//等待开启无障碍模式
 var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
 log("begin");
-var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
-images.saveImage(imgScreen, "/sdcard/hhmfile/开屏界面"+".png");
-//如果有签到栏关闭签到栏 
-// click(1799,73);//签到栏关闭坐标
-// click(2013,1013);//打开道具
+// var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
 
-myFunction();
+
+purchase();
+
+// myFunction();
 
 var x2 = 1050;
 var y2 = 265;
 var x_touch2 = x2 + 65;
 var y_touch2 = y2 + 65;
 
-for (var m = 0, array_i = 0; m < 1; m++) {
-    for (var n = 0; n < 4; n++) {
-        // log("items.length:"+items.length);
-        if (array_i < items.length-1) ++array_i;
-        // log("array："+array_i);
-        if (items[array_i].type == mapTypeEnum.TreasureMap) {
-            log("去"+items[array_i].PlaceEnum+"("+items[array_i].axisX+","+items[array_i].axisY+")挖图");
-            dig(items[array_i].PlaceEnum,items[array_i].axisX,items[array_i].axisY,x_touch2,y_touch2);
-        }
-        sleep(1000);
-        y_touch2+=130;
-    }
-    y_touch2 = y2 + 65;
-    x_touch2+=130;
-}
+// for (var m = 0, array_i = 0; m < 1; m++) {
+//     for (var n = 0; n < 4; n++) {
+//         // log("items.length:"+items.length);
+//         if (array_i < items.length-1) ++array_i;
+//         // log("array："+array_i);
+//         if (items[array_i].type == mapTypeEnum.TreasureMap) {
+//             log("去"+items[array_i].PlaceEnum+"("+items[array_i].axisX+","+items[array_i].axisY+")挖图");
+//             dig(items[array_i].PlaceEnum,items[array_i].axisX,items[array_i].axisY,x_touch2,y_touch2);
+//         }
+//         sleep(1000);
+//         y_touch2+=130;
+//     }
+//     y_touch2 = y2 + 65;
+//     x_touch2+=130;
+// }
 
 
 //点开道具栏

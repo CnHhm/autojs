@@ -52,7 +52,7 @@ function screencapture(){
         }
     }
     var img = captureScreen();
-    images.saveImage(img, "/sdcard/hhmfile/飞行符open2"+".png");
+    images.saveImage(img, "/sdcard/hhmfile/A1"+".png");
     // var imgClip = images.clip(img, 440, 266, 518, 632);
     // var logOcr= Baidu_ocr(imgClip);
     // log(logOcr);
