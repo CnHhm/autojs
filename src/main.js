@@ -212,28 +212,30 @@ function dig(location,x1,y1,x2,y2)
  */
 function purchase(){
     //去宝石商人处
-    var Screen = captureScreen();
-    var iconForjudge = images.clip(Screen, 1967, 963, 80, 92);
-    var iconForjudge2 = images.clip(Screen, 1956, 963, 80, 92);
+    // var Screen = captureScreen();
+    // var iconForjudge = images.clip(Screen, 1967, 963, 80, 92);
+    // var iconForjudge2 = images.clip(Screen, 1956, 963, 80, 92);
     // images.saveImage(iconForjudge, "/sdcard/hhmfile/道具"+".png");
-    img2 = images.read("/sdcard/hhmfile/道具.png");
-    log("similar:"+images.getSimilarity(iconForjudge, img2, {"type": "MSSIM"}));
-    log("similar2:"+images.getSimilarity(iconForjudge2, img2, {"type": "MSSIM"}));
+    // img2 = images.read("/sdcard/hhmfile/道具.png");
+    // log("similar:"+images.getSimilarity(iconForjudge, img2, {"type": "MSSIM"}));
+    // log("similar2:"+images.getSimilarity(iconForjudge2, img2, {"type": "MSSIM"}));
 
-    // var img = images.read("/sdcard/大图.png");
-    // var templ = images.read("/sdcard/小图.png");
-    // var p = findImage(img, templ);
-    // if(p){
-    //     toast("找到啦:" + p);
-    // }else{
-    //     toast("没找到");
-    // }
-
+    // img2.recycle();
+    // Screen.recycle();
+    // iconForjudge.recycle();
+    // iconForjudge2.recycle();
+    var img = images.read("/sdcard/hhmfile/bag.png");
+    var img2 = images.read("/sdcard/hhmfile/bag2.png");
+    // var img = images.read("/sdcard/hhmfile/temp.png");
+    // var img2 = images.read("/sdcard/hhmfile/temp3.png");
+    var p = findImage(img, img2);
+    if(p){
+        toastLog("找到啦:" + p);
+    }else{
+        toastLog("没找到");
+    }
+    img.recycle();
     img2.recycle();
-    Screen.recycle();
-    iconForjudge.recycle();
-    iconForjudge2.recycle();
-
 }
 //main
 auto.waitFor();//等待开启无障碍模式

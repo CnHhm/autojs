@@ -52,7 +52,8 @@ function screencapture(){
         }
     }
     var img = captureScreen();
-    images.saveImage(img, "/sdcard/hhmfile/A1"+".png");
+    var iconForjudge = images.clip(img, 1050, 400, 125, 125);
+    images.saveImage(iconForjudge, "/sdcard/hhmfile/bag3"+".png");
     // var imgClip = images.clip(img, 440, 266, 518, 632);
     // var logOcr= Baidu_ocr(imgClip);
     // log(logOcr);
