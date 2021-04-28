@@ -242,10 +242,17 @@ auto.waitFor();//等待开启无障碍模式
 var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
 log("begin");
 // var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
+var w = floaty.rawWindow(
+    <frame gravity="center">
+        <text id="text">悬浮文字</text>
+    </frame>
+);
 
+w.setPosition(500, 500);
+while (1) {
 
-purchase();
-
+}
+// purchase();
 // myFunction();
 
 var x2 = 1050;
