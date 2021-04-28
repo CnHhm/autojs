@@ -1,18 +1,19 @@
-var window = floaty.window(
-    <frame>
-        <button id="action" text="开始运行" w="90" h="40" bg="#77ffffff"/>
-        {/* <button id="action" text="关闭" w="90" h="40" bg="#77ffffff"/> */}
-    </frame>
-);
 var execution = null;
-
 //记录按键被按下时的触摸坐标
 var x = 0,
-    y = 0;
+y = 0;
 //记录按键被按下时的悬浮窗位置
 var windowX, windowY;
 //记录按键被按下的时间以便判断长按等动作
 var downTime;
+
+var window = floaty.window(
+    <frame>
+        <button id="action" text="开始运行" w="90" h="40" bg="#77ffffff"/>
+        <button id="action1" alpha="0.5" marginTop="40" gravity="bottom" text="运行" w="90" h="40" bg="#77ffffff"/>
+    </frame>
+);
+
 window.action.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
         case event.ACTION_DOWN:
@@ -34,10 +35,35 @@ window.action.setOnTouchListener(function(view, event) {
         case event.ACTION_UP:
             //手指弹起时如果偏移很小则判断为点击
             if (Math.abs(event.getRawY() - y) < 5 && Math.abs(event.getRawX() - x) < 5) {
-                // onClick();
+                onClick();
             }
             return true;
     }
     return true;
 });
+
+var flag = false;
+var thread = threads.start(function(){
+    toastLog("进入线程");
+    while(1){
+        if (flag) toastLog("hallo!");
+        sleep(3000);
+    }
+});
+
+function onClick() {
+    if (window.action.getText() == '开始运行') {
+        toastLog("onClick");
+        window.action1.attr("visibility", "gone");
+        flag = true;
+        window.action.setText('停止运行');
+    } else {
+        window.action1.attr("visibility", "visible");
+        flag = false;
+        window.action.setText('开始运行');
+    }
+}
+function myfunc() {
+    toastLog("hallo!");
+}
 while(1){};
