@@ -8,24 +8,42 @@ var windowX, windowY;
 var downTime;
 
 var window = floaty.window(
-    <relative>
-        {/* <button id="action" text="开始运行" w="90" h="40" bg="#77ffffff"/> */}
-        {/* <button id="action1" alpha="0.5" marginTop="40" gravity="bottom" text="运行" w="90" h="40" bg="#77ffffff"/> */}
+    <horizontal>
+        {/* 中心图标 */}
         <img
+        margin = "5"
         circle = "true"
-        layout_centerInParent="true" 
+        alpha = "0.5"
         id="action" 
+        bg="#00ff00"
         src="file:///sdcard/hhmfile/bag3.png"
         />
-
+        {/* 右侧 */}
         <img
-        layout_toRightOf="action"
-        layout_centerInParent="true"
-        id="action2" 
-        // background="#ff0000"
+        margin = "5"
+        circle = "true"
+        alpha = "0.5"
+        id="Right" 
+        bg="#00ff00"
         src="file:///sdcard/hhmfile/temp2.png"
         />
-    </relative>
+        {/* 右侧 */}
+        <img
+        margin = "5"
+        circle = "true"
+        alpha = "0.5"
+        id="Right" 
+        src="file:///sdcard/hhmfile/temp2.png"
+        />
+        {/* 右侧 */}
+        <img
+        margin = "5"
+        circle = "true"
+        alpha = "0.5"
+        id="Right" 
+        src="file:///sdcard/hhmfile/temp2.png"
+        />
+    </horizontal>
 );
 
 window.action.setOnTouchListener(function(view, event) {
@@ -66,6 +84,12 @@ var thread = threads.start(function(){
 });
 
 function onClick() {
+    if (window.Right.attr("visibility") == "gone") {
+        window.Right.attr("visibility", "visible");
+    }
+    else {
+        window.Right.attr("visibility", "gone");
+    }
     // if (window.action.getText() == '开始运行') {
     //     toastLog("onClick");
     //     window.action1.attr("visibility", "gone");
