@@ -8,10 +8,24 @@ var windowX, windowY;
 var downTime;
 
 var window = floaty.window(
-    <frame>
-        <button id="action" text="开始运行" w="90" h="40" bg="#77ffffff"/>
-        <button id="action1" alpha="0.5" marginTop="40" gravity="bottom" text="运行" w="90" h="40" bg="#77ffffff"/>
-    </frame>
+    <relative>
+        {/* <button id="action" text="开始运行" w="90" h="40" bg="#77ffffff"/> */}
+        {/* <button id="action1" alpha="0.5" marginTop="40" gravity="bottom" text="运行" w="90" h="40" bg="#77ffffff"/> */}
+        <img
+        circle = "true"
+        layout_centerInParent="true" 
+        id="action" 
+        src="file:///sdcard/hhmfile/bag3.png"
+        />
+
+        <img
+        layout_toRightOf="action"
+        layout_centerInParent="true"
+        id="action2" 
+        // background="#ff0000"
+        src="file:///sdcard/hhmfile/temp2.png"
+        />
+    </relative>
 );
 
 window.action.setOnTouchListener(function(view, event) {
@@ -52,18 +66,19 @@ var thread = threads.start(function(){
 });
 
 function onClick() {
-    if (window.action.getText() == '开始运行') {
-        toastLog("onClick");
-        window.action1.attr("visibility", "gone");
-        flag = true;
-        window.action.setText('停止运行');
-    } else {
-        window.action1.attr("visibility", "visible");
-        flag = false;
-        window.action.setText('开始运行');
-    }
+    // if (window.action.getText() == '开始运行') {
+    //     toastLog("onClick");
+    //     window.action1.attr("visibility", "gone");
+    //     flag = true;
+    //     window.action.setText('停止运行');
+    // } else {
+    //     window.action1.attr("visibility", "visible");
+    //     flag = false;
+    //     window.action.setText('开始运行');
+    // }
 }
 function myfunc() {
     toastLog("hallo!");
 }
+// floaty.closeAll()
 while(1){};
