@@ -1,0 +1,47 @@
+{
+    "androidResources": {
+      "resDir": "res",
+      "manifest": "AndroidManifest.xml"
+    },
+    "assets": [],
+    "build": {
+      "build_id": "6F47F367-1",
+      "build_number": 1,
+      "build_time": 1615553004812,
+      "release": true
+    },
+    "encryptLevel": 0,
+    "useFeatures": [],
+    "icon": "icons/icon.png",
+    "ignore": ["build"],
+    "launchConfig": {
+      "displaySplash": true,
+      "hideLogs": false,
+      "splashIcon": "icons/splashIcon.png",
+      "splashLayoutXml": "splash.xml",
+      "splashText": "Powered by hhm",
+      "stableMode": false
+    },
+    "main": "main.js",
+    "name": "test",
+    "optimization": {
+      "removeOpenCv": true,
+      "unusedResources": true
+    },
+    "packageName": "com.test.hhm.2021.06.01",
+    "publish": {
+      "category": "其他",
+      "details": "控件描边、渐变、水波纹、文字渐变",
+      "maxAutoJsVersion": -1,
+      "minAutoJsVersion": -1,
+      "maxProVersion": 8059999,
+      "minProVersion": 8050000,
+      "minSdkVersion": 2,
+      "permissions": [],
+      "summary": "控件描边、渐变、水波纹、文字渐变",
+      "tags": []
+    },
+    "scripts": {},
+    "versionCode": 1,
+    "versionName": "1.0.0"
+  }

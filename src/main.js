@@ -112,6 +112,8 @@ var y_touch = y + 65;
 var arrayX = [1050,1050+65,1050+65*2,1050+65*3,1050+65*4];
 var arrayY = [265,265+65,265+65*2,265+65*3,265+65*4];
 var items = new Array();
+
+//遍历道具栏
 function myFunction()
 {
     index = 0;
@@ -242,13 +244,6 @@ auto.waitFor();//等待开启无障碍模式
 var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
 log("begin");
 // var imgScreen = captureScreen();//请求截取当前屏幕，captureScreen可以不回收；
-var w = floaty.rawWindow(
-    <frame gravity="center">
-        <text id="text">悬浮文字</text>
-    </frame>
-);
-
-w.setPosition(500, 500);
 while (1) {
 
 }
