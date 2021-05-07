@@ -41,7 +41,7 @@ var window = floaty.window(
         visibility = "gone"
         circle = "true"
         alpha = "0.7"
-        id="Stop" 
+        id="exit" 
         src="file:///sdcard/hhmfile/temp2.png"
         />
     </horizontal>
@@ -85,29 +85,37 @@ window.action.setOnTouchListener(function(view, event) {
 
 var stateType = {
     Init: 1,
-    Star: 2,
+    Start: 2,
     Purchase: 3,
     Sort: 4,
     Dig: 5,
     Stop: 6,
+    Exit: 7,
   };
 
-var State = stateType.Init;
+var State = stateType.Stop;
 threads.start(function stateMachine(){
     while(1) {
         switch (State) {
             case stateType.Init:
                 // toastLog("in Init");
+                Init();
                 break;
-            case stateType.Star:
+            case stateType.Start:
+                Start();
                 break;
             case stateType.Purchase:
+                Purchase();
                 break;
             case stateType.Sort:
+                Sort();
                 break;
             case stateType.Dig:
+                Dig();
                 break;
             case stateType.Stop:
+                break;            
+            case stateType.Exit:
                 exit();
                 break;
             default:
@@ -115,6 +123,28 @@ threads.start(function stateMachine(){
         }
     }
 });
+function Init() {
+//Init all state flag
+    changeState(stateType.Start);
+}
+function Start() {
+    changeState(stateType.Purchase);
+}
+function Purchase() {
+    toastLog("买宝图");
+    //将身上清空
+    changeState(stateType.Sort);
+}
+function Sort() {
+    toastLog("分类");
+    //将身上清空
+    changeState(stateType.Dig);
+}
+function Dig() {
+    toastLog("挖图");
+    //将身上清空
+    changeState(stateType.Stop);
+}
 
 function changeState(stateType) {
     State = stateType;
@@ -152,11 +182,11 @@ window.dig.setOnTouchListener(function(view, event) {
     return true;
 });
 
-window.Stop.setOnTouchListener(function(view, event) {
+window.exit.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
         case event.ACTION_UP:
-            toastLog("Stop");
-            changeState(stateType.Stop);
+            toastLog("exit");
+            changeState(stateType.Exit);
             return true;
     }
     return true;
@@ -170,11 +200,11 @@ window.Stop.setOnTouchListener(function(view, event) {
 function action_onClick() {
     if (window.action.attr("alpha") == "0.5") {
         window.action.attr("alpha","1");
-
+        changeState(stateType.Init);
         window.purchase.attr("visibility", "visible");
         window.sort.attr("visibility", "visible");
         window.dig.attr("visibility", "visible");
-        window.Stop.attr("visibility", "visible");
+        window.exit.attr("visibility", "visible");
     } else if (window.action.attr("alpha") == 1) {
         window.action.attr("alpha","0.5");
 
@@ -182,7 +212,7 @@ function action_onClick() {
         window.purchase.attr("visibility", "gone");
         window.sort.attr("visibility", "gone");
         window.dig.attr("visibility", "gone");
-        window.Stop.attr("visibility", "gone");
+        window.exit.attr("visibility", "gone");
     }
 }
 function myfunc() {
