@@ -129,6 +129,16 @@ var window = floaty.window(
         id="action" 
         src="file:///sdcard/hhmfile/bag3.png"
         />
+        {/* 自动/手动 */}
+        <img
+        w="40" h="40"
+        margin = "5"
+        visibility = "gone"
+        circle = "true"
+        alpha = "0.7"
+        id="auto" 
+        src="file:///sdcard/hhmfile/icon/自动.png"
+        />
         {/* 买图 */}
         <img
         margin = "5"
@@ -213,8 +223,13 @@ var stateType = {
     Stop: 6,
     Exit: 7,
   };
+var workModeType = {
+    Auto: 1,
+    manual: 2,
+};
 
 var State = stateType.Stop;
+var workMode = workModeType.manual;
 threads.start(function stateMachine(){
     while(1) {
         switch (State) {
@@ -244,6 +259,16 @@ threads.start(function stateMachine(){
         }
     }
 });
+/**
+ * 图标旋转的代码
+ * 注：该定时器会被ui线程阻塞
+ */
+var ro = 0;
+var id = setInterval(function(){
+    window.auto.attr("rotation",ro+=2);
+    if (ro == 360) ro = 0;
+}, 30);
+
 function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
@@ -275,6 +300,19 @@ function changeState(stateType) {
 function getState() {
     return State;
 }
+
+window.auto.setOnTouchListener(function(view, event) {
+    switch (event.getAction()) {
+        case event.ACTION_UP:
+            if (window.auto.attr("src") == "file:///sdcard/hhmfile/icon/自动.png") {
+                window.auto.attr("src", "file:///sdcard/hhmfile/icon/手动更新.png");
+            } else if (window.auto.attr("src") == "file:///sdcard/hhmfile/icon/手动更新.png") {
+                window.auto.attr("src", "file:///sdcard/hhmfile/icon/自动.png");
+            }
+            return true;
+    }
+    return true;
+});
 
 window.purchase.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
@@ -323,14 +361,15 @@ window.exit.setOnTouchListener(function(view, event) {
 function action_onClick() {
     if (window.action.attr("alpha") == "0.5") {
         window.action.attr("alpha","1");
-        changeState(stateType.Init);
+        // changeState(stateType.Init);
+        window.auto.attr("visibility", "visible");
         window.purchase.attr("visibility", "visible");
         window.sort.attr("visibility", "visible");
         window.dig.attr("visibility", "visible");
         window.exit.attr("visibility", "visible");
     } else if (window.action.attr("alpha") == 1) {
         window.action.attr("alpha","0.5");
-
+        window.auto.attr("visibility", "gone");
         window.purchase.attr("visibility", "gone");
         window.purchase.attr("visibility", "gone");
         window.sort.attr("visibility", "gone");
@@ -342,4 +381,4 @@ function myfunc() {
     toastLog("hallo!");
 }
 // floaty.closeAll()
-while(1){};
+// while(1){};
