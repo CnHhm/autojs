@@ -123,11 +123,12 @@ var window = floaty.window(
     <horizontal>
         {/* 中心图标 */}
         <img
+        w="40" h="40"
         margin = "5"
         circle = "true"
         alpha = "0.5"
         id="action" 
-        src="file:///sdcard/hhmfile/bag3.png"
+        src="file:///sdcard/hhmfile/icon/开始.png"
         />
         {/* 自动/手动 */}
         <img
@@ -141,39 +142,43 @@ var window = floaty.window(
         />
         {/* 买图 */}
         <img
+        w="40" h="40"
         margin = "5"
         visibility = "gone"
         circle = "true"
         alpha = "0.7"
         id="purchase" 
-        src="file:///sdcard/hhmfile/temp2.png"
+        src="file:///sdcard/hhmfile/icon/买.png"
         />
         {/* 分类 */}
         <img
+        w="40" h="40"
         margin = "5"
         visibility = "gone"
         circle = "true"
         alpha = "0.7"
         id="sort" 
-        src="file:///sdcard/hhmfile/temp2.png"
+        src="file:///sdcard/hhmfile/icon/排序.png"
         />
         {/* 挖图 */}
         <img
+        w="40" h="40"
         margin = "5"
         visibility = "gone"
         circle = "true"
         alpha = "0.7"
         id="dig" 
-        src="file:///sdcard/hhmfile/temp2.png"
+        src="file:///sdcard/hhmfile/icon/铲子.png"
         />
         {/* 停止 */}
         <img
+        w="40" h="40"
         margin = "5"
         visibility = "gone"
         circle = "true"
         alpha = "0.7"
         id="exit" 
-        src="file:///sdcard/hhmfile/temp2.png"
+        src="file:///sdcard/hhmfile/icon/退出.png"
         />
     </horizontal>
 );
@@ -255,7 +260,10 @@ threads.start(function stateMachine(){
                 exit();
                 break;
             default:
-                toastLog("default");
+                toastLog("error");
+                sleep(10000);
+                exit();
+                break;
         }
     }
 });
@@ -263,42 +271,77 @@ threads.start(function stateMachine(){
  * 图标旋转的代码
  * 注：该定时器会被ui线程阻塞
  */
-var ro = 0;
-var id = setInterval(function(){
-    window.auto.attr("rotation",ro+=2);
-    if (ro == 360) ro = 0;
-}, 30);
+// var ro = 0;
+// var id = setInterval(function(){
+//     window.auto.attr("rotation",ro+=2);
+//     if (ro == 360) ro = 0;
+// }, 30);
 
 function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
     var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
-    changeState(stateType.Start);
+    AutochangeState(stateType.Start);
 }
 function Start() {
-    changeState(stateType.Purchase);
+    AutochangeState(stateType.Purchase);
 }
 function Purchase() {
     toastLog("买宝图");
-    //将身上清空
-    changeState(stateType.Sort);
+    //去买宝图的地方 1.点击道具栏 2.点击长安飞行旗子 3.点击使用 4.到轿夫处 5.关闭道具栏 6.打开小地图 7.输入坐标(493,149)点击前往 
+    //8.等待10-15秒关闭地图 9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
+    //一共7个摊位，截图后用百度识图分析含有图、T、杂货摊位的点进去
+    //
+    // 1.点击道具栏
+    click(random(1976, 1976+56),random(981, 981+70));
+    sleep(500);
+    // 2.点击长安飞行旗子
+    click(random(1057, 1057+131),random(277, 277+131));
+    sleep(500);
+    // 3.点击使用
+    click(random(725, 725+209),random(605, 605+61));
+    sleep(500);
+    // 4.到轿夫处
+    click(random(1693, 1693+39),random(565, 565+33));
+    sleep(500);
+    //5.关闭道具栏
+    click(random(1703, 1703+59),random(71, 71+55));
+    sleep(500);
+    //6.打开小地图
+    click(random(23, 23+129),random(63, 63+87));
+    sleep(500);
+    AutochangeState(stateType.Sort);
 }
 function Sort() {
     toastLog("分类");
-    //将身上清空
-    changeState(stateType.Dig);
+    AutochangeState(stateType.Dig);
 }
 function Dig() {
     toastLog("挖图");
-    //将身上清空
-    changeState(stateType.Stop);
+    AutochangeState(stateType.Stop);
 }
 
-function changeState(stateType) {
-    State = stateType;
+function changeState(stateType_input) {
+    State = stateType_input;
+}
+function AutochangeState(stateType_input) {
+    if (workMode == workModeType.Auto) {
+        State = stateType_input;
+    } else if (workMode == workModeType.manual) {
+        State = stateType.Stop;
+    }
 }
 function getState() {
     return State;
+}
+function InputCoordinates(x,y,position) {
+    switch (position) {
+        case 1://暂定为长安，之后修改
+            
+            break;
+        default:
+            break;
+    }
 }
 
 window.auto.setOnTouchListener(function(view, event) {
@@ -306,8 +349,10 @@ window.auto.setOnTouchListener(function(view, event) {
         case event.ACTION_UP:
             if (window.auto.attr("src") == "file:///sdcard/hhmfile/icon/自动.png") {
                 window.auto.attr("src", "file:///sdcard/hhmfile/icon/手动更新.png");
+                workMode = workModeType.Auto;
             } else if (window.auto.attr("src") == "file:///sdcard/hhmfile/icon/手动更新.png") {
                 window.auto.attr("src", "file:///sdcard/hhmfile/icon/自动.png");
+                workMode = workModeType.manual;
             }
             return true;
     }
@@ -337,7 +382,7 @@ window.sort.setOnTouchListener(function(view, event) {
 window.dig.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
         case event.ACTION_UP:
-            changeState(stateType.dig);
+            changeState(stateType.Dig);
             return true;
     }
     return true;
@@ -361,7 +406,7 @@ window.exit.setOnTouchListener(function(view, event) {
 function action_onClick() {
     if (window.action.attr("alpha") == "0.5") {
         window.action.attr("alpha","1");
-        // changeState(stateType.Init);
+        changeState(stateType.Init);
         window.auto.attr("visibility", "visible");
         window.purchase.attr("visibility", "visible");
         window.sort.attr("visibility", "visible");

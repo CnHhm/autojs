@@ -51,9 +51,9 @@ function screencapture(){
         }
     }
     var img = captureScreen();
-    var iconForjudge = images.clip(img, 1050, 400, 125, 125);
-    images.saveImage(iconForjudge, "/sdcard/hhmfile/bag3"+".png");
-    iconForjudge.recycle();
+    // var iconForjudge = images.clip(img, 1050, 400, 125, 125);
+    images.saveImage(img, "/sdcard/hhmfile/长安坐标3.png");
+    // iconForjudge.recycle();
     img.recycle();
 }
 screencapture();
