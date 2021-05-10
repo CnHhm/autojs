@@ -119,12 +119,22 @@ function popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
 /**
  *   背包道具框类定义 end
  */
-
+var click_index = floaty.window(
+    <frame gravity="center">
+        {/* 中心图标 */}
+        <img
+        w="10" h="10"
+        id="index" 
+        src="file:///sdcard/hhmfile/icon/圆点.png"
+        />
+    </frame>
+);
+click_index.setPosition(16,950);
 var window = floaty.window(
     <horizontal>
         {/* 中心图标 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         circle = "true"
         alpha = "0.5"
@@ -133,7 +143,7 @@ var window = floaty.window(
         />
         {/* 自动/手动 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         visibility = "gone"
         circle = "true"
@@ -143,7 +153,7 @@ var window = floaty.window(
         />
         {/* 买图 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         visibility = "gone"
         circle = "true"
@@ -153,7 +163,7 @@ var window = floaty.window(
         />
         {/* 分类 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         visibility = "gone"
         circle = "true"
@@ -163,7 +173,7 @@ var window = floaty.window(
         />
         {/* 挖图 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         visibility = "gone"
         circle = "true"
@@ -173,7 +183,7 @@ var window = floaty.window(
         />
         {/* 停止 */}
         <img
-        w="40" h="40"
+        w="30" h="30"
         margin = "5"
         visibility = "gone"
         circle = "true"
@@ -183,7 +193,7 @@ var window = floaty.window(
         />
     </horizontal>
 );
-
+window.setPosition(116,950);
 var execution = null;
 //记录按键被按下时的触摸坐标
 var x = 0,
@@ -277,7 +287,15 @@ threads.start(function stateMachine(){
 //     window.auto.attr("rotation",ro+=2);
 //     if (ro == 360) ro = 0;
 // }, 30);
-
+function click_andshow(x,y) {
+    click(x,y);
+    click_index.setPosition(x,y);
+    sleep(random(300,800));
+    //悬浮窗会遮挡点击
+    click_index.setPosition(16,950);
+    sleep(random(300,800));
+    
+}
 function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
@@ -294,23 +312,25 @@ function Purchase() {
     //一共7个摊位，截图后用百度识图分析含有图、T、杂货摊位的点进去
     //
     // 1.点击道具栏
-    click(random(1976, 1976+56),random(981, 981+70));
-    sleep(500);
+    click_andshow(random(1976, 1976+56),random(981, 981+70));
     // 2.点击长安飞行旗子
-    click(random(1057, 1057+131),random(277, 277+131));
-    sleep(500);
+    click_andshow(random(1068, 1154),random(291, 375));
     // 3.点击使用
-    click(random(725, 725+209),random(605, 605+61));
-    sleep(500);
+    click_andshow(random(725, 725+209),random(605, 605+61));
     // 4.到轿夫处
-    click(random(1693, 1693+39),random(565, 565+33));
-    sleep(500);
+    click_andshow(random(1693, 1693+39),random(565, 565+33));
     //5.关闭道具栏
-    click(random(1703, 1703+59),random(71, 71+55));
-    sleep(500);
-    //6.打开小地图
-    click(random(23, 23+129),random(63, 63+87));
-    sleep(500);
+    click_andshow(random(1703, 1703+59),random(71, 71+55));
+    //6.打开小地图 7. 8.
+    findIndex(PlaceEnum.Ca,493,149);
+    //9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
+    click_andshow(random(990, 1041),random(992, 1035));
+    click_andshow(random(1775, 1852),random(183, 348));
+    click_andshow(random(506, 668),random(195, 245));
+    sleep(random(5000,8000));//等人物跑到指定地点
+    click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
+    click_andshow(random(432, 722),random(188, 278));//点第一个摊位
+
     AutochangeState(stateType.Sort);
 }
 function Sort() {
@@ -319,7 +339,7 @@ function Sort() {
 }
 function Dig() {
     toastLog("挖图");
-    findIndex(PlaceEnum.Ca,311,211);
+    findIndex(PlaceEnum.Ca,111,111);
     AutochangeState(stateType.Stop);
 }
 
@@ -505,46 +525,37 @@ function findIndex(Place,number_X,number_Y) {
     switch (Place) {
         case PlaceEnum.Ca:
             //打开小地图
-            click(random(21,117),random(59,140));
-            sleep(500);
+            click_andshow(random(25,99),random(74,132));
             //点击X输入框
-            click(random(560,653),random(110,171));
-            sleep(500);
+            click_andshow(random(560,653),random(110,171));
             //分解
             str = number_X.toString();
             for (var i=0; i<str.length; i++) {
                 index = keyboard(615,198,Number(str[i]));
-                click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
-                sleep(500);
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
                 //确认键
                 if (i == str.length-1) {
                     index = keyboard(615,198,255);
-                    click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
-                    sleep(500);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
                 }
             }
             //点击Y输入框
-            click(random(754,845),random(110,171));
-            sleep(500);
+            click_andshow(random(754,845),random(110,171));
             //分解
             str = number_Y.toString();
             for (var i=0; i<str.length; i++) {
                 index = keyboard(808,198,Number(str[i]));
-                click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
-                sleep(500);
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
                 //点击确认键
                 if (i == str.length-1) {
                     index = keyboard(808,198,255);
-                    click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
-                    sleep(500);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
                 }
             }
             //点击前往
-            click(random(892,1072),random(110,171));
-            sleep(1000);
+            click_andshow(random(892,1072),random(110,171));
             //关闭地图
-            click(random(1774,1833),random(66,128));
-            sleep(500);
+            click_andshow(random(1774,1833),random(66,128));
             break;
     }
 }

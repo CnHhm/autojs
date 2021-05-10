@@ -1,16 +1,18 @@
-// "ui";
-var w = floaty.window(
-    <vertical>
-        <button text="第一个按钮"/>
-        <button text="第二个按钮"/>
-    </vertical>
+var w1 = floaty.window(
+    <frame gravity="center">
+        <text id="text" color = "white">悬浮文字</text>
+    </frame>
 );
-while(1);
-// setTimeout(()=>{
-//     w.close();
-// }, 2000);
-
-// sleep(1000);
-// ui.run(function(){
-//     w.text.setText("文本");
-// });
+w1.setPosition(500, 500)
+var w2 = floaty.window(
+    <frame gravity="center">
+        <text id="text" color = "white">悬浮文字</text>
+    </frame>
+);
+w2.setPosition(500, 800)
+setTimeout(()=>{
+    w1.close();
+}, 2000);
+setTimeout(()=>{
+    w2.close();
+}, 2000);
