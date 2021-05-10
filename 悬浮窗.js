@@ -99,6 +99,7 @@ var mapTypeEnum = {
     WZ:14,          //五庄观
     DTJW:15,        //大唐境外
     QLS:16,         //麒麟山
+    Ca:17,          //长安
   };
 
 function popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
@@ -318,6 +319,7 @@ function Sort() {
 }
 function Dig() {
     toastLog("挖图");
+    findIndex(PlaceEnum.Ca,311,211);
     AutochangeState(stateType.Stop);
 }
 
@@ -333,15 +335,6 @@ function AutochangeState(stateType_input) {
 }
 function getState() {
     return State;
-}
-function InputCoordinates(x,y,position) {
-    switch (position) {
-        case 1://暂定为长安，之后修改
-            
-            break;
-        default:
-            break;
-    }
 }
 
 window.auto.setOnTouchListener(function(view, event) {
@@ -422,8 +415,157 @@ function action_onClick() {
         window.exit.attr("visibility", "gone");
     }
 }
-function myfunc() {
-    toastLog("hallo!");
+
+/**
+ * 小地图以游标推算键盘相对位置
+ * 数字一的左上角坐标为：(index_X-119,index_X+52)
+ * 数字二的左上角坐标为：(index_X-119+147,index_X+52)
+ * 数字三的左上角坐标为：(index_X-119+147+147,index_X+52)
+ * 数字四的左上角坐标为：(index_X-119,index_X+52+143)
+ * 数字五的左上角坐标为：(index_X-119+147,index_X+52+143)
+ * 数字六的左上角坐标为：(index_X-119+147+147,index_X+52+143)
+ * 数字零的左上角坐标为：(index_X-119+147+147+147,index_X+52+143)
+ * 数字七的左上角坐标为：(index_X-119,index_X+52+143+143)
+ * 数字八的左上角坐标为：(index_X-119+147,index_X+52+143+143)
+ * 数字九的左上角坐标为：(index_X-119+147+147,index_X+52+143+143)
+ * 确定键的左上角坐标为：(index_X-119+147+147+147,index_X+52+143+143)
+ */
+function keyboard(index_X,index_Y,nubmer) {
+    var index = new Object;
+    index.x = 0;
+    index.y = 0;
+    switch(nubmer) {
+        case 1:
+            index.x = index_X-119;
+            index.y = index_Y+52;
+            return index;
+            break;
+        case 2:
+            index.x = index_X-119+147;
+            index.y = index_Y+52;
+            return index;
+            break;
+        case 3:
+            index.x = index_X-119+147+147;
+            index.y = index_Y+52;
+            return index;
+            break;
+        case 4:
+            index.x = index_X-119;
+            index.y = index_Y+52+143;
+            return index;
+            break;
+        case 5:
+            index.x = index_X-119+147;
+            index.y = index_Y+52+143;
+            return index;
+            break;
+        case 6:
+            index.x = index_X-119+147+147;
+            index.y = index_Y+52+143;
+            return index;
+            break;
+        case 0:
+            index.x = index_X-119+147+147+147;
+            index.y = index_Y+52+143;
+            return index;
+            break;
+        case 7:
+            index.x = index_X-119;
+            index.y = index_Y+52+143+143;
+            return index;
+            break;
+        case 8:
+            index.x = index_X-119+147;
+            index.y = index_Y+52+143+143;
+            return index;
+            break;
+        case 9:
+            index.x = index_X-119+147+147;
+            index.y = index_Y+52+143+143;
+            return index;
+            break;
+        case 255://确认键
+            index.x = index_X-119+147+147+147;
+            index.y = index_Y+52+143+143;
+            return index;
+            break;
+        default:
+            toastLog("keyboard error!")
+            sleep(2000);
+            // exit();
+    }
+
 }
+/**
+ * 根据地点找相对坐标
+ * 
+ */
+function findIndex(Place,number_X,number_Y) {
+    switch (Place) {
+        case PlaceEnum.Ca:
+            //打开小地图
+            click(random(21,117),random(59,140));
+            sleep(500);
+            //点击X输入框
+            click(random(560,653),random(110,171));
+            sleep(500);
+            //分解
+            str = number_X.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(615,198,Number(str[i]));
+                click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
+                sleep(500);
+                //确认键
+                if (i == str.length-1) {
+                    index = keyboard(615,198,255);
+                    click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
+                    sleep(500);
+                }
+            }
+            //点击Y输入框
+            click(random(754,845),random(110,171));
+            sleep(500);
+            //分解
+            str = number_Y.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(808,198,Number(str[i]));
+                click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
+                sleep(500);
+                //点击确认键
+                if (i == str.length-1) {
+                    index = keyboard(808,198,255);
+                    click(random(Number(index.x)-5,Number(index.x)-5+120),random(Number(index.y)-5,Number(index.y)-5+120));
+                    sleep(500);
+                }
+            }
+            //点击前往
+            click(random(892,1072),random(110,171));
+            sleep(1000);
+            //关闭地图
+            click(random(1774,1833),random(66,128));
+            sleep(500);
+            break;
+    }
+}
+// var PlaceEnum = {
+//     JY: 1,          //建邺城
+//     DHW: 2,         //东海湾
+//     JN: 3,          //江南野外
+//     AL:4,           //傲来国
+//     NE:5,           //女儿村
+//     HG:6,           //花果山
+//     DTGJ:7,         //大唐国境
+//     PT:8,           //普陀山
+//     CSJW:9,         //长寿郊外
+//     BJ:10,          //北俱芦洲
+//     ZZ:11,          //朱紫国
+//     STL:12,         //狮驼岭
+//     MJ:13,          //墨家村
+//     WZ:14,          //五庄观
+//     DTJW:15,        //大唐境外
+//     QLS:16,         //麒麟山
+//     Ca:17,          //长安
+//   };
 // floaty.closeAll()
 // while(1){};
