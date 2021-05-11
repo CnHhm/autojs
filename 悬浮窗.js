@@ -311,26 +311,33 @@ function Purchase() {
     //8.等待10-15秒关闭地图 9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
     //一共7个摊位，截图后用百度识图分析含有图、T、杂货摊位的点进去
     //
-    // 1.点击道具栏
-    click_andshow(random(1976, 1976+56),random(981, 981+70));
-    // 2.点击长安飞行旗子
-    click_andshow(random(1068, 1154),random(291, 375));
-    // 3.点击使用
-    click_andshow(random(725, 725+209),random(605, 605+61));
-    // 4.到轿夫处
-    click_andshow(random(1693, 1693+39),random(565, 565+33));
-    //5.关闭道具栏
-    click_andshow(random(1703, 1703+59),random(71, 71+55));
-    //6.打开小地图 7. 8.
-    findIndex(PlaceEnum.Ca,493,149);
+    // // 1.点击道具栏
+    // click_andshow(random(1976, 1976+56),random(981, 981+70));
+    // // 2.点击长安飞行旗子
+    // click_andshow(random(1068, 1154),random(291, 375));
+    // // 3.点击使用
+    // click_andshow(random(725, 725+209),random(605, 605+61));
+    // // 4.到轿夫处
+    // click_andshow(random(1693, 1693+39),random(565, 565+33));
+    // //5.关闭道具栏
+    // click_andshow(random(1703, 1703+59),random(71, 71+55));
+    // //6.打开小地图 7. 8.
+    // findIndex(PlaceEnum.Ca,493,149);
     //9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
     click_andshow(random(990, 1041),random(992, 1035));
     click_andshow(random(1775, 1852),random(183, 348));
     click_andshow(random(506, 668),random(195, 245));
-    sleep(random(5000,8000));//等人物跑到指定地点
+    // sleep(random(5000,8000));//等人物跑到指定地点
     click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
     click_andshow(random(432, 722),random(188, 278));//点第一个摊位
-
+    click_andshow(random(18, 79),random(209, 401));//更多摊位
+    //识别
+    var img = captureScreen();
+    for (var i = 0; i < 7; i++) {
+        //根据摊主ID来区分是否点击过PS：左侧摊位在点击后会发生变化
+        var Forjudge = images.clip(img, 260, 231, 211, 74);
+    }
+    
     AutochangeState(stateType.Sort);
 }
 function Sort() {

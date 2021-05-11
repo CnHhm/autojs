@@ -53,7 +53,7 @@ function screencapture(){
     sleep(5000);
     var img = captureScreen();
     // var iconForjudge = images.clip(img, 1050, 400, 125, 125);
-    images.saveImage(img, "/sdcard/hhmfile/更多摊位2.png");
+    images.saveImage(img, "/sdcard/hhmfile/附近摊位_识别2.png");
     // iconForjudge.recycle();
     img.recycle();
 }
