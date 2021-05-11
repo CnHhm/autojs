@@ -53,9 +53,37 @@ function screencapture(){
     sleep(5000);
     var img = captureScreen();
     // var iconForjudge = images.clip(img, 1050, 400, 125, 125);
-    images.saveImage(img, "/sdcard/hhmfile/附近摊位_识别2.png");
+    images.saveImage(img, "/sdcard/hhmfile/空白背包2.png");
+    // src = images.read("/sdcard/hhmfile/摊位宝图识别.png");
+    // var logOcr= Baidu_ocr(src);
+    // log(logOcr);
+    // var wordResult=logOcr.words_result;
+    // var count=0;
+    // wordResult.forEach(element => {
+    //     count++;
+    //     log(count+":"+element.words);
+    // });
     // iconForjudge.recycle();
     img.recycle();
 }
+function compare() {
+    src = images.read("/sdcard/hhmfile/摊位宝图识别.png");
+    img1 = images.clip(src, 575, 308, 91, 80);
+    img2 = images.clip(src, 1069, 308, 91, 80);
+    sleep(1000);
+    images.saveImage(img1, "/sdcard/hhmfile/forjudge/摊位宝图1-1.png");
+    sleep(1000);
+    images.saveImage(img2, "/sdcard/hhmfile/forjudge/摊位宝图1-2.png");
+    sleep(1000);
+    images.saveImage(img1, "/sdcard/hhmfile/forjudge/摊位宝图1-3.png");
+    sleep(1000);
+    log(images.getSimilarity(img1, img2, {
+        "type": "MSSIM"
+    }));
+    src.recycle();
+    img1.recycle();
+    img2.recycle();
+}
+// compare();
 screencapture();
 log("finsh;");
