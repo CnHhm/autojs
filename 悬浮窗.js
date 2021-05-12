@@ -246,7 +246,7 @@ var workModeType = {
 
 var State = stateType.Stop;
 var workMode = workModeType.manual;
-threads.start(function stateMachine(){
+threads.start(function stateMachine() {
     while(1) {
         switch (State) {
             case stateType.Init:
@@ -278,6 +278,14 @@ threads.start(function stateMachine(){
         }
     }
 });
+var stopFlag = 0;
+threads.start(function stopThread() {
+    while(1) {
+        if (stopFlag) {
+            exit();
+        }
+    }
+});
 /**
  * 图标旋转的代码
  * 注：该定时器会被ui线程阻塞
@@ -287,6 +295,11 @@ threads.start(function stateMachine(){
 //     window.auto.attr("rotation",ro+=2);
 //     if (ro == 360) ro = 0;
 // }, 30);
+
+/**
+ * 显示点击位置
+ * 加了随机延时
+ */
 function click_andshow(x,y) {
     click(x,y);
     click_index.setPosition(x,y);
@@ -296,6 +309,40 @@ function click_andshow(x,y) {
     sleep(random(300,800));
     
 }
+
+/**
+ * 查询背包空余位置
+ * 
+ */
+function countEmpty() {
+    var img0 = captureScreen();
+    var packageX = 1048;
+    var packageY = 270;
+    var countEmpty = 0;
+    for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 4; j++) {
+            var clip0 = images.clip(img0, packageX, packageY, 128, 128);
+            var src = images.read("/sdcard/hhmfile/forjudge/package/"+i+"-"+j+".png");
+            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package/"+i+"-"+j+".png");
+            compareResult = images.getSimilarity(clip0, src, {
+                "type": "MSSIM"
+            });
+            if (compareResult > 2.8 && compareResult < 3) {
+                countEmpty++;
+            }
+            clip0.recycle();
+            src.recycle();
+            packageY+=131;
+        }
+        packageY = 270;
+        packageX+=131;
+        if (i==1) {
+            packageX++;
+        }
+    }
+    return countEmpty;
+}
+
 function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
@@ -306,100 +353,96 @@ function Start() {
     AutochangeState(stateType.Purchase);
 }
 function Purchase() {
-    toastLog("买宝图");
+    log("买宝图");
     //去买宝图的地方 1.点击道具栏 2.点击长安飞行旗子 3.点击使用 4.到轿夫处 5.关闭道具栏 6.打开小地图 7.输入坐标(493,149)点击前往 
     //8.等待10-15秒关闭地图 9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
     //一共7个摊位，截图后用百度识图分析含有图、T、杂货摊位的点进去
     //
-    // // 1.1点击道具栏
-    // click_andshow(random(1976, 1976+56),random(981, 981+70));
+    // 1.1点击道具栏
+    click_andshow(random(1976, 1976+56),random(981, 981+70));
     // 1.2遍历背包，计算剩余空位
-    var img0 = captureScreen();
-    var packageX = 1048;
-    var packageY = 270;
-    for (var i = 0; i < 5; i++) {
-        log("i:"+i);
-        for (var j = 0; j < 4; j++) {
-            var clip0 = images.clip(img0, packageX, packageY, 128, 128);
-            packageY+=131;
-            images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package/"+i+"-"+j+".png");
-            clip0.recycle();
-        }
-        packageY = 270;
-        packageX+=131;
-        if (i==1) {
-            log("in");
-            packageX++;
-        }
-    }
-    // // 2.点击长安飞行旗子
-    // click_andshow(random(1068, 1154),random(291, 375));
-    // // 3.点击使用
-    // click_andshow(random(725, 725+209),random(605, 605+61));
-    // // 4.到轿夫处
-    // click_andshow(random(1693, 1693+39),random(565, 565+33));
-    // //5.关闭道具栏
-    // click_andshow(random(1703, 1703+59),random(71, 71+55));
-    // //6.打开小地图 7. 8.
-    // findIndex(PlaceEnum.Ca,493,149);
+    log("有"+countEmpty()+"个空位");
+    var remainPosition = countEmpty();
+    // 2.点击长安飞行旗子
+    click_andshow(random(1068, 1154),random(291, 375));
+    // 3.点击使用
+    click_andshow(random(725, 725+209),random(605, 605+61));
+    // 4.到轿夫处
+    click_andshow(random(1693, 1693+39),random(565, 565+33));
+    //5.关闭道具栏
+    click_andshow(random(1703, 1703+59),random(71, 71+55));
+    //6.打开小地图 7. 8.
+    findIndex(PlaceEnum.Ca,493,149);
     //9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
-    // click_andshow(random(990, 1041),random(992, 1035));
-    // click_andshow(random(1775, 1852),random(183, 348));
-    // click_andshow(random(506, 668),random(195, 245));
-    // sleep(random(5000,8000));//等人物跑到指定地点
-    // click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
-    // click_andshow(random(432, 722),random(188, 278));//点第一个摊位
-    // click_andshow(random(18, 79),random(209, 401));//更多摊位
-    //识别
-    // var img = captureScreen();
-    // images.saveImage(img, "/sdcard/hhmfile/temp/img.png");
-    // img = images.read("/sdcard/hhmfile/temp/img.png");
-    // for (var i = 0; i < 7; i++) {
-    //     //根据摊主ID来区分是否点击过PS：左侧摊位在点击后会发生变化
-    //     var Forjudge = images.clip(img, 260, 231+i*87, 211, 74);
-    //     // images.saveImage(Forjudge, "/sdcard/hhmfile/摊位"+i+".png");
-    //     var logOcr= Baidu_ocr(Forjudge);
-    //     var wordResult=logOcr.words_result;
-    //     if (wordResult) {
-    //         // var count=0; //百度ocr是按每行来划分的，这里就一行就不划分行号了
-    //         wordResult.forEach(element => {
-    //             // count++;
-    //             log(element.words+"search-T:"+element.words.search("T"));
-    //             if ( (element.words.search("T") != -1) || (element.words.search("图") != -1) || (element.words.search("杂货摊位") != -1) ) {
-    //                 click_andshow(random(260,260+211),random(231+i*87,231+i*87+74));
-    //                 sleep(random(300,500));
-    //                 while (0) { //背包有空位的时候
+    click_andshow(random(990, 1041),random(992, 1035));
+    click_andshow(random(1775, 1852),random(183, 348));
+    click_andshow(random(506, 668),random(195, 245));
+    sleep(random(5000,8000));//等人物跑到指定地点
+    click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
+    click_andshow(random(432, 722),random(188, 278));//点第一个摊位
+    click_andshow(random(28, 79),random(231, 392));//更多摊位
+    // 识别
+    var img = captureScreen();
+    images.saveImage(img, "/sdcard/hhmfile/temp/img.png");
+    img = images.read("/sdcard/hhmfile/temp/img.png");
+    while (remainPosition) {
+        for (var i = 0; i < 7; i++) {
+            //根据摊主ID来区分是否点击过PS：左侧摊位在点击后会发生变化
+            var Forjudge = images.clip(img, 260, 231+i*87, 211, 74);
+            // images.saveImage(Forjudge, "/sdcard/hhmfile/摊位"+i+".png");
+            var logOcr= Baidu_ocr(Forjudge);
+            var wordResult=logOcr.words_result;
+            Forjudge.recycle();
+            if (wordResult) {
+                // var count=0; //百度ocr是按每行来划分的，这里就一行就不划分行号了
+                wordResult.forEach(element => {
+                    // count++;
+                    log(element.words+"search-T:"+element.words.search("T"));
+                    if ( (element.words.search("T") != -1) || (element.words.search("图") != -1) || (element.words.search("杂货摊位") != -1) ) {
+                        click_andshow(random(260,260+211),random(231+i*87,231+i*87+74));
+                        sleep(random(300,500));
+                        while (remainPosition) { //背包有空位的时候
+                            var img2 = captureScreen();
+                            obj = images.clip(img2, 575, 308, 91, 80);
+                            src = images.read("/sdcard/hhmfile/forjudge/摊位宝图1-1.png");
+                            compareResult = images.getSimilarity(obj, src, {
+                                "type": "MSSIM"
+                            });
+                            src.recycle();
+                            obj.recycle();
+                            if (compareResult < 3.0 && compareResult >2.8) {
+                                click_andshow(random(575,666),random(308,388));
+                                sleep(2000);
+                                var img3 = captureScreen();
+                                obj = images.clip(img3, 1221,847, 1501-1221,887-847);
+                                images.saveImage(obj, "/sdcard/hhmfile/价格"+i+".png");
+                                logOcr= Baidu_ocr(obj);
+                                wordResult=logOcr.words_result;
+                                obj.recycle();
+                                if (wordResult[0].words <= 27000 ) {
+                                    click_andshow(random(1673,1863),random(881,948));
+                                    remainPosition--;
+                                    log("还剩："+remainPosition);
+                                } else {
+                                    //价格不行换一家
+                                    log("太贵");
+                                    break;
+                                }
+                            } else {
+                                //卖的不是宝图换一家
+                                log("不是宝图");
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+            // sleep(1000);
+        }
+        click_andshow(random(279,464),random(889,930));//这边点不到，记得查一下 error
+    }
 
-    //                 }
-    //                 var img2 = captureScreen();
-    //                 obj = images.clip(img2, 575, 308, 91, 80);
-    //                 src = images.read("/sdcard/hhmfile/forjudge/摊位宝图1-1.png");
-    //                 compareResult = images.getSimilarity(obj, src, {
-    //                     "type": "MSSIM"
-    //                 });
-    //                 src.recycle();
-    //                 obj.recycle();
-    //                 if (compareResult < 3.0 && compareResult >2.8) {
-    //                     click_andshow(random(575,666),random(308,388));
-    //                     sleep(2000);
-    //                     var img3 = captureScreen();
-    //                     obj = images.clip(img3, 1221,847, 1501-1221,887-847);
-    //                     images.saveImage(obj, "/sdcard/hhmfile/价格"+i+".png");
-    //                     logOcr= Baidu_ocr(obj);
-    //                     wordResult=logOcr.words_result;
-    //                     if (wordResult[0].words < 28333 ) {
-    //                         log("可以购买");
-    //                         click_andshow(random(1673,1863),random(881,948));
-    //                     }
-    //                     obj.recycle();
-    //                 }
-    //                 sleep(3000);
-    //             }
-    //         });
-    //     }
-    //     Forjudge.recycle();
-    //     // sleep(1000);
-    // }
+    log("purchase end.");
     AutochangeState(stateType.Sort);
 }
 function Sort() {
@@ -444,7 +487,7 @@ window.auto.setOnTouchListener(function(view, event) {
 window.purchase.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
         case event.ACTION_UP:
-            toastLog("purchase");
+            log("purchase");
             changeState(stateType.Purchase);
             return true;
     }
@@ -475,6 +518,7 @@ window.exit.setOnTouchListener(function(view, event) {
         case event.ACTION_UP:
             toastLog("exit");
             changeState(stateType.Exit);
+            stopFlag = 1;
             return true;
     }
     return true;
