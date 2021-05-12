@@ -441,17 +441,94 @@ function Purchase() {
         }
         click_andshow(random(279,464),random(889,930));//这边点不到，记得查一下 error
     }
-
+    //关闭界面各个
     log("purchase end.");
     AutochangeState(stateType.Sort);
 }
 function Sort() {
-    toastLog("分类");
+    log("分类");
+    //1.打开道具栏
+    click_andshow(random(1976, 1976+56),random(981, 981+70));
+    //2.把所有宝图打开
+    var img = captureScreen();
+    var packageX = 1048;
+    var packageY = 270;
+    for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 4; j++) {
+            var clip0 = images.clip(img, packageX, packageY, 128, 128);
+            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+            var src = images.read("/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+            compareResult = images.getSimilarity(clip0, src, {
+                "type": "MSSIM"
+            });
+            // log(i+"-"+j+"result:"+compareResult);
+            src.recycle();
+            clip0.recycle();            
+            if (compareResult > 2.8 && compareResult < 3) {
+                //是宝图；
+                click_andshow(random(packageX,packageX+128),random(packageY,packageY+128));
+                sleep(random(300,500));
+                var img2 = captureScreen();
+                var clip1 = images.clip(img2, 440,264, 957-440,860-264);
+                src2 = images.read("/sdcard/hhmfile/forjudge/button-使用.png");
+                var result = images.findImage(clip1, src2); //找使用的位置
+                log(result);
+                src2.recycle();
+                clip1.recycle();
+                
+            }
+            // if (是宝图) {
+            //     click_andshow();//点击宝图
+            //     var result = images.findImage(obj, src); //找使用的位置
+            // }
+            packageY+=131;
+        }
+        packageY = 270;
+        packageX+=131;
+        if (i==1) {
+            packageX++;
+        }
+    }
+    //3.飞到XL
+    //4.关闭道具栏
+    //5.点击仓库管理员->我要进行仓库操作
+    //6.遍历道具栏的宝图，并记录下位置
+    //7.转到地2页遍历第六步记下的位置，如果宝图位置为相应仓库的宝图，则存入仓库
+    //   PS：第一个仓库为耗材存放仓库，宝图仓库为2-18，排序见PlaceEnum
+    //8.存完再去买宝图或者挖图
+
+    // 判断使用/移动按钮位置的
+    // var img = captureScreen();
+    // var obj = images.clip(img, 440,264, 957-440,860-264);
+    // src = images.read("/sdcard/hhmfile/forjudge/button-移动.png");//button-使用.png
+    // var result = images.findImage(obj, src);
+    // log(result);
+    // log("type:"+typeof(result));//440+40 264+350
+    // var keys= Object.keys(result);
+    // log("key:"+keys);
+    // obj.recycle();
+    // src.recycle();
     AutochangeState(stateType.Dig);
 }
 function Dig() {
-    toastLog("挖图");
-    findIndex(PlaceEnum.Ca,111,111);
+    log("挖图");
+    var img = captureScreen();
+    var obj = images.clip(img, 1014,171, 1248-1014,259-171);
+    var src = images.read("/sdcard/hhmfile/forjudge/button-on-道具.png");
+    var src2 = images.read("/sdcard/hhmfile/forjudge/button-up-道具.png");
+    compareResult = images.getSimilarity(obj, src, {
+        "type": "MSSIM"
+    });
+    compareResult2 = images.getSimilarity(obj, src2, {
+        "type": "MSSIM"
+    });
+    log("result1:"+compareResult);
+    log("result2:"+compareResult2);
+
+    src.recycle();
+    src2.recycle();
+    obj.recycle();
+    // findIndex(PlaceEnum.Ca,111,111);
     AutochangeState(stateType.Stop);
 }
 
@@ -497,7 +574,7 @@ window.purchase.setOnTouchListener(function(view, event) {
 window.sort.setOnTouchListener(function(view, event) {
     switch (event.getAction()) {
         case event.ACTION_UP:
-            toastLog("sort");
+            log("sort");
             changeState(stateType.Sort);
             return true;
     }

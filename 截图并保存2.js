@@ -52,8 +52,10 @@ function screencapture(){
     }
     sleep(5000);
     var img = captureScreen();
-    // var iconForjudge = images.clip(img, 1050, 400, 125, 125);
-    images.saveImage(img, "/sdcard/hhmfile/空白背包2.png");
+    var iconForjudge1 = images.clip(img, 1014,171, 1248-1014,259-171);
+    var iconForjudge2 = images.clip(img, 1257,171, 1493-1257,259-171);
+    images.saveImage(iconForjudge1, "/sdcard/hhmfile/button-up-道具2.png");
+    images.saveImage(iconForjudge2, "/sdcard/hhmfile/button-on-行囊2.png");
     // src = images.read("/sdcard/hhmfile/摊位宝图识别.png");
     // var logOcr= Baidu_ocr(src);
     // log(logOcr);
@@ -63,7 +65,8 @@ function screencapture(){
     //     count++;
     //     log(count+":"+element.words);
     // });
-    // iconForjudge.recycle();
+    iconForjudge1.recycle();
+    iconForjudge2.recycle();
     img.recycle();
 }
 function compare() {
