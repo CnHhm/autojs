@@ -351,11 +351,10 @@ var buttonType = {
     use: 1,
     move: 2,
     more: 3,
+    save: 4,
   };
 
 function findButton(button) {
- 
-    
     switch (button) {
         case buttonType.use:
             var img = captureScreen();
@@ -385,22 +384,57 @@ function findButton(button) {
             src.recycle();
             return result;
             break;
+        case buttonType.save:
+            var img = captureScreen();
+            var clip = images.clip(img, 542,315, 1044-542,827-315);
+            src = images.read("/sdcard/hhmfile/forjudge/button-存入仓库.png");
+            var result = images.findImage(clip, src); //找使用的位置
+            if (result) {
+                result.x+= 542;
+                result.y+= 315;
+            }
+            clip.recycle();
+            src.recycle();
+            return result;
         default:
             break;
     }
-
-
 }
 
 /**
  * 点击道具栏
  * 
  */
-function clickItem(row,column) {
-    var deta =131; 
-    var verticesX = 1048-deta;
-    var verticesY = 270-deta;
-    click(random(verticesX+column*deta+11,verticesX+column*deta+100),random(verticesY+row*deta+11,verticesY+row*deta+100));
+function clickItem(row,column,isPackage) {
+    if (isPackage) {
+        var deta =131; 
+        var verticesX = 1048-deta;
+        var verticesY = 270-deta;
+    } else {
+        var deta =131; 
+        var verticesX = 1095-deta;
+        var verticesY = 315-deta;
+    }
+    click_andshow(random(verticesX+column*deta+11,verticesX+column*deta+100),random(verticesY+row*deta+11,verticesY+row*deta+100));
+}
+
+/**
+ * 点击仓库页数
+ * 
+ */
+function clickPage(page) {
+    var row = 5;
+    var colum = 5;
+    if (page <= row*colum) {
+        var rowClick = (page-1)/colum;
+        var columClick = (page-1)%colum;
+        log("row:"+rowClick+";colum:"+columClick);
+        var verticesX = 419;
+        var verticesY = 187;
+        click_andshow(random(verticesX+columClick*133+30,verticesX+columClick*133+119-30),random(verticesY+rowClick*131+30,verticesY+rowClick*131+119-30));
+    } else {
+        log("page error");
+    }
 }
 
 function Init() {
@@ -441,10 +475,19 @@ function Purchase() {
     click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
     click_andshow(random(432, 722),random(188, 278));//点第一个摊位
     result = findButton(buttonType.more);
-    click_andshow(random(28, 79),random(231, 392));//更多摊位,这里摊位会跑，要用找图来点击
+    if (result) {
+        click_andshow(random(Number(result.x), Number(result.x)+48),random(Number(result.y), +Number(result.y)+170));//更多摊位,这里摊位会跑，要用找图来点击
+    } else {
+        toastLog("error:找不到更多摊位按钮");
+        sleep(3000);
+    }
+    
     // 识别
     while (remainPosition) {
         for (var i = 0; i < 7; i++) {
+            if (remainPosition == 0) {
+                break;
+            }
             var img = captureScreen();
             // images.saveImage(img, "/sdcard/hhmfile/temp/img.png");
             // img = images.read("/sdcard/hhmfile/temp/img.png");
@@ -481,7 +524,7 @@ function Purchase() {
                                 wordResult=logOcr.words_result;
                                 obj.recycle();
                                 if (wordResult[0].words <= 28000 ) {
-                                    click_andshow(random(1673,1863),random(881,948));
+                                    click_andshow(random(1673,1863),random(881,948));//中间延时太久了，图容易被抢，被抢后任然记为购买
                                     remainPosition--;
                                     log("还剩："+remainPosition);
                                 } else {
@@ -502,7 +545,9 @@ function Purchase() {
         }
         click_andshow(random(279,464),random(889,930));//这边点不到，记得查一下 error
     }
-    //关闭界面各个
+    //关闭各个界面
+    click_andshow(random(1930,1983),random(70,126));//关闭摊位
+    click_andshow(random(1710,1761),random(77,128));//关闭系统
     log("purchase end.");
     AutochangeState(stateType.Sort);
 }
@@ -511,40 +556,40 @@ function Sort() {
     //1.打开道具栏
     click_andshow(random(1976, 1976+56),random(981, 981+70));
     //2.把所有宝图打开
-    // var packageX = 1048;
-    // var packageY = 270;
-    // for (var i = 0; i < 5; i++) {
-    //     for (var j = 0; j < 4; j++) {
-    //         var img = captureScreen();
-    //         var clip0 = images.clip(img, packageX, packageY, 128, 128);
-    //         // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
-    //         var src = images.read("/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
-    //         compareResult = images.getSimilarity(clip0, src, {
-    //             "type": "MSSIM"
-    //         });
-    //         // log(i+"-"+j+"result:"+compareResult);
-    //         src.recycle();
-    //         clip0.recycle();            
-    //         if (compareResult > 2.8 && compareResult < 3) {
-    //             //是宝图；
-    //             click_andshow(random(packageX,packageX+128),random(packageY,packageY+128));
-    //             sleep(random(300,500));
-    //             result = findButton(buttonType.use);
-    //             if (result) {
-    //                 click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-    //                 click_andshow(random(1191,1570),random(511,535));//点掉弹出提示，测试时有出现延时
-    //             }
-    //         }
-    //         packageY+=131;
-    //     }
-    //     packageY = 270;
-    //     packageX+=131;
-    //     if (i==1) {
-    //         packageX++;
-    //     }
-    // }
+    var packageX = 1048;
+    var packageY = 270;
+    for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 4; j++) {
+            var img = captureScreen();
+            var clip0 = images.clip(img, packageX, packageY, 128, 128);
+            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+            var src = images.read("/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+            compareResult = images.getSimilarity(clip0, src, {
+                "type": "MSSIM"
+            });
+            // log(i+"-"+j+"result:"+compareResult);
+            src.recycle();
+            clip0.recycle();            
+            if (compareResult > 2.8 && compareResult < 3) {
+                //是宝图；
+                click_andshow(random(packageX,packageX+128),random(packageY,packageY+128));
+                sleep(random(300,500));
+                result = findButton(buttonType.use);
+                if (result) {
+                    click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+                    click_andshow(random(1191,1570),random(511,535));//点掉弹出提示，测试时有出现延时
+                }
+            }
+            packageY+=131;
+        }
+        packageY = 270;
+        packageX+=131;
+        if (i==1) {
+            packageX++;
+        }
+    }
     //3.飞到XL
-    clickItem(1,2);
+    clickItem(1,2,1);
     sleep(random(300,500));
     result = findButton(buttonType.use);
     click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
@@ -555,6 +600,19 @@ function Sort() {
     click_andshow(random(1091, 1136),random(176, 263));
     click_andshow(random(1727, 2139),random(612, 699));
     //6.遍历道具栏的宝图，并记录下位置
+    for(var i = 0;i<5;i++) {
+        for (var j = 0; j<4;j++) {
+            clickItem(j+1,i+1,0);
+            var img2 = captureScreen();
+            var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
+            var logOcr= Baidu_ocr(clip2);
+            var wordResult=logOcr.words_result;
+            for (k=0;k<wordResult.length;k++){
+                log("wordResult[k].words:"+wordResult[k].words);
+            }
+            clip2.recycle();
+        }
+    }
     //7.转到地2页遍历第六步记下的位置，如果宝图位置为相应仓库的宝图，则存入仓库
     //   PS：第一个仓库为耗材存放仓库，宝图仓库为2-18，排序见PlaceEnum
     //8.存完再去买宝图或者挖图
@@ -574,22 +632,118 @@ function Sort() {
 }
 function Dig() {
     log("挖图");
-    var img = captureScreen();
-    var obj = images.clip(img, 1014,171, 1248-1014,259-171);
-    var src = images.read("/sdcard/hhmfile/forjudge/button-on-道具.png");
-    var src2 = images.read("/sdcard/hhmfile/forjudge/button-up-道具.png");
-    compareResult = images.getSimilarity(obj, src, {
-        "type": "MSSIM"
-    });
-    compareResult2 = images.getSimilarity(obj, src2, {
-        "type": "MSSIM"
-    });
-    log("result1:"+compareResult);
-    log("result2:"+compareResult2);
+    for(var i = 0;i<5;i++) {
+        for (var j = 0; j<4;j++) {
+            log("**************"+i+"-"+j+"**************");
+            clickItem(j+1,i+1,0);
+            var img2 = captureScreen();
+            var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
+            var logOcr= Baidu_ocr(clip2);//没有超时处理
+            clip2.recycle();
+            var wordResult=logOcr.words_result;
+            //wordResult[0].words用于判断是不是宝图
+            //wordResult[3].words记录了地点和坐标
+            if (logOcr.words_result_num) {
+                if (wordResult[0].words.search("藏宝图") != -1) {
+                    if (wordResult[3].words.search("建邺城") != -1) {
+                        log("建邺城");
+                        var page = 2;
+                    } else if (wordResult[3].words.search("东海湾") != -1) {
+                        log("东海湾");
+                        var page = 3;
+                    } else if (wordResult[3].words.search("江南野外") != -1) {
+                        log("江南野外");
+                        var page = 4;
+                    } else if (wordResult[3].words.search("傲来国") != -1) {
+                        log("傲来国");
+                        var page = 5;
+                    } else if (wordResult[3].words.search("女儿村") != -1) {
+                        log("女儿村");
+                        var page = 6;
+                    } else if (wordResult[3].words.search("花果山") != -1) {
+                        log("花果山");
+                        var page = 7;
+                    } else if (wordResult[3].words.search("大唐国境") != -1) {
+                        log("大唐国境");
+                        var page = 8;
+                    } else if (wordResult[3].words.search("普陀山") != -1) {
+                        log("普陀山");
+                        var page = 9;
+                    } else if (wordResult[3].words.search("长寿郊外") != -1) {
+                        log("长寿郊外");
+                        var page = 10;
+                    } else if (wordResult[3].words.search("北俱芦洲") != -1) {
+                        log("北俱芦洲");
+                        var page = 11;
+                    } else if (wordResult[3].words.search("朱紫国") != -1) {
+                        log("朱紫国");
+                        var page = 12;
+                    }  else if (wordResult[3].words.search("狮驼岭") != -1) {
+                        log("狮驼岭");
+                        var page = 13;
+                    } else if (wordResult[3].words.search("墨家村") != -1) {
+                        log("墨家村");
+                        var page = 14;
+                    } else if (wordResult[3].words.search("五庄观") != -1) {
+                        log("五庄观");
+                        var page = 15;
+                    } else if (wordResult[3].words.search("大唐境外") != -1) {
+                        log("大唐境外");
+                        var page = 16;
+                    } else if (wordResult[3].words.search("麒麟山") != -1) {
+                        log("麒麟山");
+                        var page = 17;
+                    } else {
+                        log("未识别");
+                    }
+                    result = findButton(buttonType.save);
+                    sleep(1000);
+                    click_andshow(random(512,628-512),random(904,944-904));//没点到位置
+                    sleep(1000);
+                    clickPage(page);//有小数输出
+                    sleep(1000);
+                    clickItem(j+1,i+1,0);
+                    sleep(1000);
+                    click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
+                }
+            }
+        }
+    }
+    // var PlaceEnum = {
+    //     JY: 1,          //建邺城
+    //     DHW: 2,         //东海湾
+    //     JN: 3,          //江南野外
+    //     AL:4,           //傲来国
+    //     NE:5,           //女儿村
+    //     HG:6,           //花果山
+    //     DTGJ:7,         //大唐国境
+    //     PT:8,           //普陀山
+    //     CSJW:9,         //长寿郊外
+    //     BJ:10,          //北俱芦洲
+    //     ZZ:11,          //朱紫国
+    //     STL:12,         //狮驼岭
+    //     MJ:13,          //墨家村
+    //     WZ:14,          //五庄观
+    //     DTJW:15,        //大唐境外
+    //     QLS:16,         //麒麟山
+    //     Ca:17,          //长安
+    //   };
+    // var img = captureScreen();
+    // var obj = images.clip(img, 1014,171, 1248-1014,259-171);
+    // var src = images.read("/sdcard/hhmfile/forjudge/button-on-道具.png");
+    // var src2 = images.read("/sdcard/hhmfile/forjudge/button-up-道具.png");
+    // compareResult = images.getSimilarity(obj, src, {
+    //     "type": "MSSIM"
+    // });
+    // compareResult2 = images.getSimilarity(obj, src2, {
+    //     "type": "MSSIM"
+    // });
+    // log("result1:"+compareResult);
+    // log("result2:"+compareResult2);
 
-    src.recycle();
-    src2.recycle();
-    obj.recycle();
+    // src.recycle();
+    // src2.recycle();
+    // obj.recycle();
     // findIndex(PlaceEnum.Ca,111,111);
     AutochangeState(stateType.Stop);
 }

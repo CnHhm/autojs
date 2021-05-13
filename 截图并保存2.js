@@ -52,9 +52,9 @@ function screencapture(){
     }
     sleep(5000);
     var img = captureScreen();
-    var iconForjudge1 = images.clip(img, 27,221, 75-27,391-221);
+    // var iconForjudge1 = images.clip(img, 566,754, 795-566,807-754);
     // var iconForjudge2 = images.clip(img, 1257,171, 1493-1257,259-171);
-    images.saveImage(iconForjudge1, "/sdcard/hhmfile/更多摊位-button2.png");
+    images.saveImage(img, "/sdcard/hhmfile/仓库页码2.png");
     // images.saveImage(iconForjudge2, "/sdcard/hhmfile/button-on-行囊2.png");
     // src = images.read("/sdcard/hhmfile/摊位宝图识别.png");
     // var logOcr= Baidu_ocr(src);
@@ -65,7 +65,7 @@ function screencapture(){
     //     count++;
     //     log(count+":"+element.words);
     // });
-    iconForjudge1.recycle();
+    // iconForjudge1.recycle();
     // iconForjudge2.recycle();
     img.recycle();
 }
