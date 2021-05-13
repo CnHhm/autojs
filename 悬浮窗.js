@@ -343,6 +343,66 @@ function countEmpty() {
     return countEmpty;
 }
 
+/**
+ * 找到按钮的位置
+ * 
+ */
+var buttonType = {
+    use: 1,
+    move: 2,
+    more: 3,
+  };
+
+function findButton(button) {
+ 
+    
+    switch (button) {
+        case buttonType.use:
+            var img = captureScreen();
+            var clip = images.clip(img, 440,264, 957-440,860-264);
+            src = images.read("/sdcard/hhmfile/forjudge/button-使用.png");
+            var result = images.findImage(clip, src); //找使用的位置
+            if (result) {
+                result.x+= 440;
+                result.y+= 264;
+            }
+            clip.recycle();
+            src.recycle();
+            return result;
+            break;
+        case buttonType.move:
+            break;
+        case buttonType.more:
+            var img = captureScreen();
+            var clip = images.clip(img, 0,200, 360,422-200);
+            src = images.read("/sdcard/hhmfile/forjudge/更多摊位-button.png");
+            var result = images.findImage(clip, src); //找使用的位置
+            if (result) {
+                result.x+= 0;
+                result.y+= 200;
+            }
+            clip.recycle();
+            src.recycle();
+            return result;
+            break;
+        default:
+            break;
+    }
+
+
+}
+
+/**
+ * 点击道具栏
+ * 
+ */
+function clickItem(row,column) {
+    var deta =131; 
+    var verticesX = 1048-deta;
+    var verticesY = 270-deta;
+    click(random(verticesX+column*deta+11,verticesX+column*deta+100),random(verticesY+row*deta+11,verticesY+row*deta+100));
+}
+
 function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
@@ -380,13 +440,14 @@ function Purchase() {
     sleep(random(5000,8000));//等人物跑到指定地点
     click_andshow(random(1314, 1542),random(696, 744));//附近的摊位
     click_andshow(random(432, 722),random(188, 278));//点第一个摊位
-    click_andshow(random(28, 79),random(231, 392));//更多摊位
+    result = findButton(buttonType.more);
+    click_andshow(random(28, 79),random(231, 392));//更多摊位,这里摊位会跑，要用找图来点击
     // 识别
-    var img = captureScreen();
-    images.saveImage(img, "/sdcard/hhmfile/temp/img.png");
-    img = images.read("/sdcard/hhmfile/temp/img.png");
     while (remainPosition) {
         for (var i = 0; i < 7; i++) {
+            var img = captureScreen();
+            // images.saveImage(img, "/sdcard/hhmfile/temp/img.png");
+            // img = images.read("/sdcard/hhmfile/temp/img.png");
             //根据摊主ID来区分是否点击过PS：左侧摊位在点击后会发生变化
             var Forjudge = images.clip(img, 260, 231+i*87, 211, 74);
             // images.saveImage(Forjudge, "/sdcard/hhmfile/摊位"+i+".png");
@@ -419,7 +480,7 @@ function Purchase() {
                                 logOcr= Baidu_ocr(obj);
                                 wordResult=logOcr.words_result;
                                 obj.recycle();
-                                if (wordResult[0].words <= 27000 ) {
+                                if (wordResult[0].words <= 28000 ) {
                                     click_andshow(random(1673,1863),random(881,948));
                                     remainPosition--;
                                     log("还剩："+remainPosition);
@@ -450,48 +511,49 @@ function Sort() {
     //1.打开道具栏
     click_andshow(random(1976, 1976+56),random(981, 981+70));
     //2.把所有宝图打开
-    var img = captureScreen();
-    var packageX = 1048;
-    var packageY = 270;
-    for (var i = 0; i < 5; i++) {
-        for (var j = 0; j < 4; j++) {
-            var clip0 = images.clip(img, packageX, packageY, 128, 128);
-            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
-            var src = images.read("/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
-            compareResult = images.getSimilarity(clip0, src, {
-                "type": "MSSIM"
-            });
-            // log(i+"-"+j+"result:"+compareResult);
-            src.recycle();
-            clip0.recycle();            
-            if (compareResult > 2.8 && compareResult < 3) {
-                //是宝图；
-                click_andshow(random(packageX,packageX+128),random(packageY,packageY+128));
-                sleep(random(300,500));
-                var img2 = captureScreen();
-                var clip1 = images.clip(img2, 440,264, 957-440,860-264);
-                src2 = images.read("/sdcard/hhmfile/forjudge/button-使用.png");
-                var result = images.findImage(clip1, src2); //找使用的位置
-                log(result);
-                src2.recycle();
-                clip1.recycle();
-                
-            }
-            // if (是宝图) {
-            //     click_andshow();//点击宝图
-            //     var result = images.findImage(obj, src); //找使用的位置
-            // }
-            packageY+=131;
-        }
-        packageY = 270;
-        packageX+=131;
-        if (i==1) {
-            packageX++;
-        }
-    }
+    // var packageX = 1048;
+    // var packageY = 270;
+    // for (var i = 0; i < 5; i++) {
+    //     for (var j = 0; j < 4; j++) {
+    //         var img = captureScreen();
+    //         var clip0 = images.clip(img, packageX, packageY, 128, 128);
+    //         // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+    //         var src = images.read("/sdcard/hhmfile/forjudge/package-treasure/"+i+"-"+j+".png");
+    //         compareResult = images.getSimilarity(clip0, src, {
+    //             "type": "MSSIM"
+    //         });
+    //         // log(i+"-"+j+"result:"+compareResult);
+    //         src.recycle();
+    //         clip0.recycle();            
+    //         if (compareResult > 2.8 && compareResult < 3) {
+    //             //是宝图；
+    //             click_andshow(random(packageX,packageX+128),random(packageY,packageY+128));
+    //             sleep(random(300,500));
+    //             result = findButton(buttonType.use);
+    //             if (result) {
+    //                 click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+    //                 click_andshow(random(1191,1570),random(511,535));//点掉弹出提示，测试时有出现延时
+    //             }
+    //         }
+    //         packageY+=131;
+    //     }
+    //     packageY = 270;
+    //     packageX+=131;
+    //     if (i==1) {
+    //         packageX++;
+    //     }
+    // }
     //3.飞到XL
+    clickItem(1,2);
+    sleep(random(300,500));
+    result = findButton(buttonType.use);
+    click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+    click_andshow(random(886,936),random(417,459));
     //4.关闭道具栏
+    click_andshow(random(1703, 1703+59),random(71, 71+55));
     //5.点击仓库管理员->我要进行仓库操作
+    click_andshow(random(1091, 1136),random(176, 263));
+    click_andshow(random(1727, 2139),random(612, 699));
     //6.遍历道具栏的宝图，并记录下位置
     //7.转到地2页遍历第六步记下的位置，如果宝图位置为相应仓库的宝图，则存入仓库
     //   PS：第一个仓库为耗材存放仓库，宝图仓库为2-18，排序见PlaceEnum
