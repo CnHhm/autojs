@@ -84,25 +84,25 @@ var mapTypeEnum = {
     Props: 3,
   };
 
-  var PlaceEnum = {
-    JY: 1,          //建邺城
-    DHW: 2,         //东海湾
-    JN: 3,          //江南野外
-    AL:4,           //傲来国
-    NE:5,           //女儿村
-    HG:6,           //花果山
-    DTGJ:7,         //大唐国境
-    PT:8,           //普陀山
-    CSJW:9,         //长寿郊外
-    BJ:10,          //北俱芦洲
-    ZZ:11,          //朱紫国
-    STL:12,         //狮驼岭
-    MJ:13,          //墨家村
-    WZ:14,          //五庄观
-    DTJW:15,        //大唐境外
-    QLS:16,         //麒麟山
-    Ca:17,          //长安
-  };
+var PlaceEnum = {
+JY: 1,          //建邺城
+DHW: 2,         //东海湾
+JN: 3,          //江南野外
+AL:4,           //傲来国
+NE:5,           //女儿村
+HG:6,           //花果山
+DTGJ:7,         //大唐国境
+PT:8,           //普陀山
+CSJW:9,         //长寿郊外
+BJ:10,          //北俱芦洲
+ZZ:11,          //朱紫国
+STL:12,         //狮驼岭
+MJ:13,          //墨家村
+WZ:14,          //五庄观
+DTJW:15,        //大唐境外
+QLS:16,         //麒麟山
+Ca:17,          //长安
+};
 
 function popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
 {
@@ -131,7 +131,7 @@ var click_index = floaty.window(
         />
     </frame>
 );
-click_index.setPosition(16,950);
+click_index.setPosition(10,1050);
 var window = floaty.window(
     <horizontal>
         {/* 中心图标 */}
@@ -195,7 +195,7 @@ var window = floaty.window(
         />
     </horizontal>
 );
-window.setPosition(116,950);
+window.setPosition(216,980);
 var execution = null;
 //记录按键被按下时的触摸坐标
 var x = 0,
@@ -375,6 +375,41 @@ function countEmpty_Rep() {
     }
     return countEmpty;
 }
+
+/**
+ * 在仓库整背包
+ * 
+ */
+function bagCleanRep() {
+    
+    var packageX = 1088;
+    var packageY = 313;
+    for (var i = 0; i < 5; i++) {//i是列
+        for (var j = 0; j < 4; j++) {//j是行
+            var img0 = captureScreen();
+            var clip0 = images.clip(img0, packageX, packageY, 127, 127);
+            var src = images.read("/sdcard/hhmfile/forjudge/repBag/"+i+"-"+j+".png");
+            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/repBag/"+i+"-"+j+".png");
+            compareResult = images.getSimilarity(clip0, src, {
+                "type": "MSSIM"
+            });
+            log(i+"-"+j+":"+compareResult);
+            if (compareResult < 2.8 || compareResult > 3) {
+                clickItem(j+1,i+1,0);
+                result = findButton(buttonType.save);
+                if (result)
+                click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
+            }
+            clip0.recycle();
+            src.recycle();
+            packageY+=131;
+        }
+        packageY = 313;
+        packageX+=131;
+    }
+    return;
+}
+
 
 /**
  * 找到按钮的位置
@@ -754,17 +789,155 @@ function Sort() {
     // obj.recycle();
     // src.recycle();
 }
+// var PlaceEnum = {
+//     JY: 1,          //建邺城
+//     DHW: 2,         //东海湾
+//     JN: 3,          //江南野外
+//     AL:4,           //傲来国
+//     NE:5,           //女儿村
+//     HG:6,           //花果山
+//     DTGJ:7,         //大唐国境
+//     PT:8,           //普陀山
+//     CSJW:9,         //长寿郊外
+//     BJ:10,          //北俱芦洲
+//     ZZ:11,          //朱紫国
+//     STL:12,         //狮驼岭
+//     MJ:13,          //墨家村
+//     WZ:14,          //五庄观
+//     DTJW:15,        //大唐境外
+//     QLS:16,         //麒麟山
+//     Ca:17,          //长安
+// };
+function goTo(Place) {
+    click_andshow(random(1976, 1976+56),random(981, 981+70));
+    switch (Place) {
+        case PlaceEnum.JY:
+            clickItem(1,2,1);//飞行符
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(1326, 1389),random(641, 673));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            break;
+        case PlaceEnum.DHW:
+            clickItem(1,3,1);//AL
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(1350, 1383),random(813, 842));
+            click_andshow(random(1703, 1703+59),random(71, 71+55));//关闭道具栏
+            click_andshow(random(1049, 1089),random(468, 533));//点驿站
+            click_andshow(random(1731, 2142),random(479, 573));//我要去
+            break;
+        case PlaceEnum.JN:
+            clickItem(1,1,1);//CA
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(1738, 1768),random(876, 905));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(2105, 2166),random(973, 1033));//收起扩展
+            click_andshow(random(1915, 2045),random(973, 1033));
+            click_andshow(random(2105, 2166),random(973, 1033));//打开扩展
+            break;
+        case PlaceEnum.AL:
+            clickItem(1,3,1);//AL
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(793, 824),random(772, 802));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            break;
+        case PlaceEnum.NE:
+            clickItem(1,3,1);//AL
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(615, 646),random(249, 278));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(139, 247),random(308, 348));
+            break;
+        case PlaceEnum.HG:
+            clickItem(1,3,1);//AL
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(1550, 1583),random(247, 272));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(1882, 1972),random(172, 210));
+            break;
+        case PlaceEnum.DTGJ:
+            clickItem(1,1,1);//CA
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(454, 486),random(876, 905));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(97, 111),random(982, 1001));
+            break;
+        case PlaceEnum.PT:
+            clickItem(1,1,1);//CA
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(454, 486),random(876, 905));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(97, 111),random(982, 1001));
+            findIndex(PlaceEnum.DTGJ,221,61);
+            sleep(28000);//26s-30s
+            click_andshow(random(1089, 1123),random(448, 563));//点传送
+            click_andshow(random(1735, 2073),random(484, 568));
+            break;
+        default:
+            break;
+    }
+}
 function Dig() {
     log("挖图");
     // 1.飞到XL
-    // 2.点开仓库
+    // click_andshow(random(1976, 1976+56),random(981, 981+70));
+    // clickItem(1,2,1);
+    // sleep(random(300,500));
+    // result = findButton(buttonType.use);
+    // click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+    // click_andshow(random(886,936),random(417,459));
+    // // 2.点开仓库
+    // click_andshow(random(1703, 1703+59),random(71, 71+55));
+    // click_andshow(random(1091, 1136),random(176, 263));
+    // click_andshow(random(1727, 2139),random(612, 699));
     // 3.清理背包 (找图是可以调参的)
+    // bagCleanRep();
     // 4. while(2-16仓库有图) 
     // 5. 记下仓库号
     // 6. 取旗子
     // 7. 取图
     // 8. 关仓库
     // 9. 去某地
+    goTo(PlaceEnum.PT);
     // 10. 遍历背包，记录坐标
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
@@ -1003,6 +1176,40 @@ function findIndex(Place,number_X,number_Y) {
             click_andshow(random(892,1072),random(110,171));
             //关闭地图
             click_andshow(random(1774,1833),random(66,128));
+            break;
+        case PlaceEnum.DTGJ:
+            //打开小地图
+            click_andshow(random(25,99),random(74,132));
+            //点击X输入框
+            click_andshow(random(675,761),random(72,124));
+            //分解
+            str = number_X.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(727,158,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //确认键
+                if (i == str.length-1) {
+                    index = keyboard(727,158,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击Y输入框
+            click_andshow(random(872,958),random(72,124));
+            //分解
+            str = number_Y.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(920,158,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //点击确认键
+                if (i == str.length-1) {
+                    index = keyboard(920,158,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击前往
+            click_andshow(random(1013,1177),random(72,124));
+            //关闭地图
+            click_andshow(random(1664,1719),random(26,89));
             break;
     }
 }
