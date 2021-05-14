@@ -51,7 +51,9 @@ function Baidu_ocr(imgFile){
         language_type:"CHN_ENG"
     });
     var json = ocr_Res.body.json();
-    //log(json);
+    if (json.error_code) {
+        log("error["+json.error_code+"]:"+json.error_msg);
+    }
     return json;
 }
 //截图并调用识图
@@ -314,7 +316,7 @@ function click_andshow(x,y) {
  * 查询背包空余位置
  * 
  */
-function countEmpty() {
+function countEmpty_Bag() {
     var img0 = captureScreen();
     var packageX = 1048;
     var packageY = 270;
@@ -339,6 +341,37 @@ function countEmpty() {
         if (i==1) {
             packageX++;
         }
+    }
+    return countEmpty;
+}
+
+/**
+ * 查询仓库空余位置Repository
+ * 
+ */
+var countEmpty_Rep_min = 20;
+function countEmpty_Rep() {
+    var img0 = captureScreen();
+    var packageX = 383;
+    var packageY = 313;
+    var countEmpty = 0;
+    for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 4; j++) {
+            var clip0 = images.clip(img0, packageX, packageY, 127, 127);
+            var src = images.read("/sdcard/hhmfile/forjudge/repEmpty/"+i+"-"+j+".png");
+            // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/repEmpty/"+i+"-"+j+".png");
+            compareResult = images.getSimilarity(clip0, src, {
+                "type": "MSSIM"
+            });
+            if (compareResult > 2.8 && compareResult < 3) {
+                countEmpty++;
+            }
+            clip0.recycle();
+            src.recycle();
+            packageY+=131;
+        }
+        packageY = 313;
+        packageX+=131;
     }
     return countEmpty;
 }
@@ -426,7 +459,7 @@ function clickPage(page) {
     var row = 5;
     var colum = 5;
     if (page <= row*colum) {
-        var rowClick = (page-1)/colum;
+        var rowClick = Math.floor((page-1)/colum);
         var columClick = (page-1)%colum;
         log("row:"+rowClick+";colum:"+columClick);
         var verticesX = 419;
@@ -455,8 +488,8 @@ function Purchase() {
     // 1.1点击道具栏
     click_andshow(random(1976, 1976+56),random(981, 981+70));
     // 1.2遍历背包，计算剩余空位
-    log("有"+countEmpty()+"个空位");
-    var remainPosition = countEmpty();
+    log("有"+countEmpty_Bag()+"个空位");
+    var remainPosition = countEmpty_Bag();
     // 2.点击长安飞行旗子
     click_andshow(random(1068, 1154),random(291, 375));
     // 3.点击使用
@@ -482,7 +515,7 @@ function Purchase() {
         sleep(3000);
     }
     
-    // 识别
+    // 识别 error:被别人抢走以后无法恢复正常的购图流程
     while (remainPosition) {
         for (var i = 0; i < 7; i++) {
             if (remainPosition == 0) {
@@ -599,24 +632,116 @@ function Sort() {
     //5.点击仓库管理员->我要进行仓库操作
     click_andshow(random(1091, 1136),random(176, 263));
     click_andshow(random(1727, 2139),random(612, 699));
-    //6.遍历道具栏的宝图，并记录下位置
-    for(var i = 0;i<5;i++) {
-        for (var j = 0; j<4;j++) {
-            clickItem(j+1,i+1,0);
-            var img2 = captureScreen();
-            var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
-            var logOcr= Baidu_ocr(clip2);
-            var wordResult=logOcr.words_result;
-            for (k=0;k<wordResult.length;k++){
-                log("wordResult[k].words:"+wordResult[k].words);
-            }
-            clip2.recycle();
-        }
-    }
+    //6.遍历道具栏的宝图，并记录下位置->暂时不用
+    // for(var i = 0;i<5;i++) {
+    //     for (var j = 0; j<4;j++) {
+    //         clickItem(j+1,i+1,0);
+    //         var img2 = captureScreen();
+    //         var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
+    //         var logOcr= Baidu_ocr(clip2);
+    //         var wordResult=logOcr.words_result;
+    //         for (k=0;k<wordResult.length;k++){
+    //             log("wordResult[k].words:"+wordResult[k].words);
+    //         }
+    //         clip2.recycle();
+    //     }
+    // }
     //7.转到地2页遍历第六步记下的位置，如果宝图位置为相应仓库的宝图，则存入仓库
     //   PS：第一个仓库为耗材存放仓库，宝图仓库为2-18，排序见PlaceEnum
+    var repRemain = new Object;
+    repRemain.count = 20;
+    repRemain.page = 0;
+    for(var i = 0;i<5;i++) {
+        for (var j = 0; j<4;j++) {
+            log("**************"+i+"-"+j+"**************");
+            if (1) {//这里用找图加一个识别能加快很多
+                clickItem(j+1,i+1,0);
+                sleep(random(300,500));
+                var img2 = captureScreen();
+                var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
+                var logOcr= Baidu_ocr(clip2);//没有超时处理
+                clip2.recycle();
+                var wordResult=logOcr.words_result;
+                //wordResult[0].words用于判断是不是宝图
+                //wordResult[3].words记录了地点和坐标
+                log("number:"+logOcr.words_result_num);
+                if (logOcr.words_result_num) {
+                    if (wordResult[0].words.search("藏宝图") != -1) {
+                        if (wordResult[3].words.search("建邺城") != -1) {
+                            log("建邺城");
+                            var page = 2;
+                        } else if (wordResult[3].words.search("东海湾") != -1) {
+                            log("东海湾");
+                            var page = 3;
+                        } else if (wordResult[3].words.search("江南野外") != -1) {
+                            log("江南野外");
+                            var page = 4;
+                        } else if (wordResult[3].words.search("傲来国") != -1) {
+                            log("傲来国");
+                            var page = 5;
+                        } else if (wordResult[3].words.search("女儿村") != -1) {
+                            log("女儿村");
+                            var page = 6;
+                        } else if (wordResult[3].words.search("花果山") != -1) {
+                            log("花果山");
+                            var page = 7;
+                        } else if (wordResult[3].words.search("大唐国境") != -1) {
+                            log("大唐国境");
+                            var page = 8;
+                        } else if (wordResult[3].words.search("普陀山") != -1) {
+                            log("普陀山");
+                            var page = 9;
+                        } else if (wordResult[3].words.search("长寿郊外") != -1) {
+                            log("长寿郊外");
+                            var page = 10;
+                        } else if (wordResult[3].words.search("北俱芦洲") != -1) {
+                            log("北俱芦洲");
+                            var page = 11;
+                        } else if (wordResult[3].words.search("朱紫国") != -1) {
+                            log("朱紫国");
+                            var page = 12;
+                        }  else if (wordResult[3].words.search("狮驼岭") != -1) {
+                            log("狮驼岭");
+                            var page = 13;
+                        } else if (wordResult[3].words.search("墨家村") != -1) {
+                            log("墨家村");
+                            var page = 14;
+                        } else if (wordResult[3].words.search("五庄观") != -1) {
+                            log("五庄观");
+                            var page = 15;
+                        } else if (wordResult[3].words.search("大唐境外") != -1) {
+                            log("大唐境外");
+                            var page = 16;
+                        } else if (wordResult[3].words.search("麒麟山") != -1) {
+                            log("麒麟山");
+                            var page = 17;
+                        } else {
+                            log("未识别");
+                            var page = 18;
+                        }
+                        result = findButton(buttonType.save);
+                        click_andshow(random(512,628),random(904,944));
+                        clickPage(page);
+                        clickItem(j+1,i+1,0);
+                        click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
+                        var countEmpty = countEmpty_Rep();
+                        if (countEmpty < repRemain) {
+                            repRemain.count = countEmpty;
+                            repRemain.page = page;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    click_andshow(random(1710,1766),random(72,122));
     //8.存完再去买宝图或者挖图
-
+    var threshold = 18;
+    if (repRemain.count < threshold) {
+        changeState(stateType.Dig);
+    } else {
+        changeState(stateType.Purchase);
+    }
     // 判断使用/移动按钮位置的
     // var img = captureScreen();
     // var obj = images.clip(img, 440,264, 957-440,860-264);
@@ -628,106 +753,22 @@ function Sort() {
     // log("key:"+keys);
     // obj.recycle();
     // src.recycle();
-    AutochangeState(stateType.Dig);
 }
 function Dig() {
     log("挖图");
-    for(var i = 0;i<5;i++) {
-        for (var j = 0; j<4;j++) {
-            log("**************"+i+"-"+j+"**************");
-            clickItem(j+1,i+1,0);
-            var img2 = captureScreen();
-            var clip2 = images.clip(img2, 566, 329, 1022-566, 832-329);
-            var logOcr= Baidu_ocr(clip2);//没有超时处理
-            clip2.recycle();
-            var wordResult=logOcr.words_result;
-            //wordResult[0].words用于判断是不是宝图
-            //wordResult[3].words记录了地点和坐标
-            if (logOcr.words_result_num) {
-                if (wordResult[0].words.search("藏宝图") != -1) {
-                    if (wordResult[3].words.search("建邺城") != -1) {
-                        log("建邺城");
-                        var page = 2;
-                    } else if (wordResult[3].words.search("东海湾") != -1) {
-                        log("东海湾");
-                        var page = 3;
-                    } else if (wordResult[3].words.search("江南野外") != -1) {
-                        log("江南野外");
-                        var page = 4;
-                    } else if (wordResult[3].words.search("傲来国") != -1) {
-                        log("傲来国");
-                        var page = 5;
-                    } else if (wordResult[3].words.search("女儿村") != -1) {
-                        log("女儿村");
-                        var page = 6;
-                    } else if (wordResult[3].words.search("花果山") != -1) {
-                        log("花果山");
-                        var page = 7;
-                    } else if (wordResult[3].words.search("大唐国境") != -1) {
-                        log("大唐国境");
-                        var page = 8;
-                    } else if (wordResult[3].words.search("普陀山") != -1) {
-                        log("普陀山");
-                        var page = 9;
-                    } else if (wordResult[3].words.search("长寿郊外") != -1) {
-                        log("长寿郊外");
-                        var page = 10;
-                    } else if (wordResult[3].words.search("北俱芦洲") != -1) {
-                        log("北俱芦洲");
-                        var page = 11;
-                    } else if (wordResult[3].words.search("朱紫国") != -1) {
-                        log("朱紫国");
-                        var page = 12;
-                    }  else if (wordResult[3].words.search("狮驼岭") != -1) {
-                        log("狮驼岭");
-                        var page = 13;
-                    } else if (wordResult[3].words.search("墨家村") != -1) {
-                        log("墨家村");
-                        var page = 14;
-                    } else if (wordResult[3].words.search("五庄观") != -1) {
-                        log("五庄观");
-                        var page = 15;
-                    } else if (wordResult[3].words.search("大唐境外") != -1) {
-                        log("大唐境外");
-                        var page = 16;
-                    } else if (wordResult[3].words.search("麒麟山") != -1) {
-                        log("麒麟山");
-                        var page = 17;
-                    } else {
-                        log("未识别");
-                    }
-                    result = findButton(buttonType.save);
-                    sleep(1000);
-                    click_andshow(random(512,628-512),random(904,944-904));//没点到位置
-                    sleep(1000);
-                    clickPage(page);//有小数输出
-                    sleep(1000);
-                    clickItem(j+1,i+1,0);
-                    sleep(1000);
-                    click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
-                }
-            }
-        }
-    }
-    // var PlaceEnum = {
-    //     JY: 1,          //建邺城
-    //     DHW: 2,         //东海湾
-    //     JN: 3,          //江南野外
-    //     AL:4,           //傲来国
-    //     NE:5,           //女儿村
-    //     HG:6,           //花果山
-    //     DTGJ:7,         //大唐国境
-    //     PT:8,           //普陀山
-    //     CSJW:9,         //长寿郊外
-    //     BJ:10,          //北俱芦洲
-    //     ZZ:11,          //朱紫国
-    //     STL:12,         //狮驼岭
-    //     MJ:13,          //墨家村
-    //     WZ:14,          //五庄观
-    //     DTJW:15,        //大唐境外
-    //     QLS:16,         //麒麟山
-    //     Ca:17,          //长安
-    //   };
+    // 1.飞到XL
+    // 2.点开仓库
+    // 3.清理背包 (找图是可以调参的)
+    // 4. while(2-16仓库有图) 
+    // 5. 记下仓库号
+    // 6. 取旗子
+    // 7. 取图
+    // 8. 关仓库
+    // 9. 去某地
+    // 10. 遍历背包，记录坐标
+    // 11. 打开小地图输入坐标
+    // 12. 到地点->使用宝图
+
     // var img = captureScreen();
     // var obj = images.clip(img, 1014,171, 1248-1014,259-171);
     // var src = images.read("/sdcard/hhmfile/forjudge/button-on-道具.png");

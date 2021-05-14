@@ -1,0 +1,12 @@
+ocr_Res:
+[ 'raw',
+  'statusCode',
+  'statusMessage',
+  'body',
+  'request',
+  'url',
+  'method',
+  'headers' ] 
+
+ocr_Res.body:
+[ 'response', 'raw', 'contentType', '__string__' ]
