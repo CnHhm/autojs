@@ -51,15 +51,15 @@ function screencapture(){
             flag = 0;
         }
     }
-    sleep(5000);
-    // var img = captureScreen();
+    sleep(3000);
+    var img = captureScreen();
     // var iconForjudge1 = images.clip(img, 566,754, 795-566,807-754);
     // var iconForjudge2 = images.clip(img, 1257,171, 1493-1257,259-171);
-    // images.saveImage(img, "/sdcard/hhmfile/PT-传送2.png");
+    images.saveImage(img, "/sdcard/hhmfile/旗子-ZZ2.png");
     // images.saveImage(iconForjudge2, "/sdcard/hhmfile/button-on-行囊2.png");
         // src = images.read("/sdcard/hhmfile/长安坐标.png");
-        // clip = images.clip(src, 1780,74, 1827-1780,121-74);
-        // images.saveImage(clip, "/sdcard/hhmfile/forjudge/mapKeyborad/close.png");
+        // clip = images.clip(src, 496+147+147+147,250+143+143, 80,80);
+        // images.saveImage(clip, "/sdcard/hhmfile/forjudge/mapKeyborad/11-numberButton.png");
         // src.recycle();
         // clip.recycle();
     // var logOcr= Baidu_ocr(src);
@@ -96,74 +96,7 @@ function compare() {
     img1.recycle();
     img2.recycle();
 }
-function findIndex(number_X,number_Y) {
-    //打开小地图
-    //点击X输入框
-    src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/x-input.png");
-    var p = findImage(captureScreen(), src);
-    log(p);
-    //分解
-    str = number_X.toString();
-    for (var i=0; i<str.length; i++) {
-        //确认键
-        if (i == str.length-1) {
 
-        }
-    }
-    src.recycle();
-}
-function keyboard(nubmer) {
-    switch (nubmer) {
-        case 1:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 2:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 3:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 4:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 5:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 6:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 7:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 8:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 9:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 0:
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png");
-            break;
-        case 255://确认
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/确定-Button.png");
-            break;
-        case 254://前往
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/前往-button.png");
-            break;
-        case 253://x坐标
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/x-input.png");
-            break;
-        case 252://y坐标
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/y-input.png");
-            break;
-        case 251://close
-            src = images.read("/sdcard/hhmfile/forjudge/mapKeyborad/close.png");
-            break;
-    }
-    var p = findImage(captureScreen(), src);
-    click()
-}
 // compare();
 screencapture();
-findIndex(111,211);
 log("finsh;");
