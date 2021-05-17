@@ -789,6 +789,17 @@ function Sort() {
     // obj.recycle();
     // src.recycle();
 }
+function mapInput(Place,x,y) {
+    switch(Place) {
+        case PlaceEnum.JY:
+            break;
+        default:
+            toastLog("map input error!");
+            sleep(3000);
+            exit();
+            break;
+    }
+}
 // var PlaceEnum = {
 //     JY: 1,          //建邺城
 //     DHW: 2,         //东海湾
@@ -1070,149 +1081,222 @@ function action_onClick() {
  * 数字九的左上角坐标为：(index_X-119+147+147,index_X+52+143+143)
  * 确定键的左上角坐标为：(index_X-119+147+147+147,index_X+52+143+143)
  */
-function keyboard(index_X,index_Y,nubmer) {
-    var index = new Object;
-    index.x = 0;
-    index.y = 0;
-    switch(nubmer) {
+// function keyboard(index_X,index_Y,nubmer) {
+//     var index = new Object;
+//     index.x = 0;
+//     index.y = 0;
+//     switch(nubmer) {
+//         case 1:
+//             index.x = index_X-119;
+//             index.y = index_Y+52;
+//             return index;
+//             break;
+//         case 2:
+//             index.x = index_X-119+147;
+//             index.y = index_Y+52;
+//             return index;
+//             break;
+//         case 3:
+//             index.x = index_X-119+147+147;
+//             index.y = index_Y+52;
+//             return index;
+//             break;
+//         case 4:
+//             index.x = index_X-119;
+//             index.y = index_Y+52+143;
+//             return index;
+//             break;
+//         case 5:
+//             index.x = index_X-119+147;
+//             index.y = index_Y+52+143;
+//             return index;
+//             break;
+//         case 6:
+//             index.x = index_X-119+147+147;
+//             index.y = index_Y+52+143;
+//             return index;
+//             break;
+//         case 0:
+//             index.x = index_X-119+147+147+147;
+//             index.y = index_Y+52+143;
+//             return index;
+//             break;
+//         case 7:
+//             index.x = index_X-119;
+//             index.y = index_Y+52+143+143;
+//             return index;
+//             break;
+//         case 8:
+//             index.x = index_X-119+147;
+//             index.y = index_Y+52+143+143;
+//             return index;
+//             break;
+//         case 9:
+//             index.x = index_X-119+147+147;
+//             index.y = index_Y+52+143+143;
+//             return index;
+//             break;
+//         case 255://确认键
+//             index.x = index_X-119+147+147+147;
+//             index.y = index_Y+52+143+143;
+//             return index;
+//             break;
+//         default:
+//             toastLog("keyboard error!")
+//             sleep(2000);
+//             // exit();
+//     }
+
+// }
+function findIndex(Place,number_X,number_Y) {
+    //打开小地图
+    click_andshow(random(25,99),random(74,132));
+    //点击X输入框
+    keyboard(253);
+    //分解
+    str = number_X.toString();
+    for (var i=0; i<str.length; i++) {
+        keyboard(Number(str[i]));
+        //确认键
+        if (i == str.length-1) {
+            keyboard(255);
+        }
+    }
+    src.recycle();
+}
+function keyboard(nubmer) {
+    switch (nubmer) {
         case 1:
-            index.x = index_X-119;
-            index.y = index_Y+52;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/1-numberButton.png";
             break;
         case 2:
-            index.x = index_X-119+147;
-            index.y = index_Y+52;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/2-numberButton.png";
             break;
         case 3:
-            index.x = index_X-119+147+147;
-            index.y = index_Y+52;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/3-numberButton.png";
             break;
         case 4:
-            index.x = index_X-119;
-            index.y = index_Y+52+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/4-numberButton.png";
             break;
         case 5:
-            index.x = index_X-119+147;
-            index.y = index_Y+52+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/5-numberButton.png";
             break;
         case 6:
-            index.x = index_X-119+147+147;
-            index.y = index_Y+52+143;
-            return index;
-            break;
-        case 0:
-            index.x = index_X-119+147+147+147;
-            index.y = index_Y+52+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/6-numberButton.png";
             break;
         case 7:
-            index.x = index_X-119;
-            index.y = index_Y+52+143+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/7-numberButton.png";
             break;
         case 8:
-            index.x = index_X-119+147;
-            index.y = index_Y+52+143+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/8-numberButton.png";
             break;
         case 9:
-            index.x = index_X-119+147+147;
-            index.y = index_Y+52+143+143;
-            return index;
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/9-numberButton.png";
             break;
-        case 255://确认键
-            index.x = index_X-119+147+147+147;
-            index.y = index_Y+52+143+143;
-            return index;
+        case 0:
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/0-numberButton.png";
             break;
-        default:
-            toastLog("keyboard error!")
-            sleep(2000);
-            // exit();
+        case 255://确认
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/确定-Button.png";
+            break;
+        case 254://前往
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/前往-button.png";
+            break;
+        case 253://x坐标
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/x-input.png";
+            break;
+        case 252://y坐标
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/y-input.png");
+            break;
+        case 251://close
+            path = "/sdcard/hhmfile/forjudge/mapKeyborad/close.png";
+            break;
     }
-
+    src = images.read(path);
+    deta = images.readPixels(path);
+    var p = findImage(captureScreen(), src);
+    if (number == 253 || number == 252) {//+30 -20,要定位到框内
+        click_andshow(random(p.x+30,p.x+deta.width-20),random(p.y,p.y+deta.height));
+    } else {
+        click_andshow(random(p.x,p.x+deta.width),random(p.y,p.y+deta.height));
+    }
 }
 /**
  * 根据地点找相对坐标
  * 
  */
-function findIndex(Place,number_X,number_Y) {
-    switch (Place) {
-        case PlaceEnum.Ca:
-            //打开小地图
-            click_andshow(random(25,99),random(74,132));
-            //点击X输入框
-            click_andshow(random(560,653),random(110,171));
-            //分解
-            str = number_X.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(615,198,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //确认键
-                if (i == str.length-1) {
-                    index = keyboard(615,198,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击Y输入框
-            click_andshow(random(754,845),random(110,171));
-            //分解
-            str = number_Y.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(808,198,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //点击确认键
-                if (i == str.length-1) {
-                    index = keyboard(808,198,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击前往
-            click_andshow(random(892,1072),random(110,171));
-            //关闭地图
-            click_andshow(random(1774,1833),random(66,128));
-            break;
-        case PlaceEnum.DTGJ:
-            //打开小地图
-            click_andshow(random(25,99),random(74,132));
-            //点击X输入框
-            click_andshow(random(675,761),random(72,124));
-            //分解
-            str = number_X.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(727,158,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //确认键
-                if (i == str.length-1) {
-                    index = keyboard(727,158,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击Y输入框
-            click_andshow(random(872,958),random(72,124));
-            //分解
-            str = number_Y.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(920,158,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //点击确认键
-                if (i == str.length-1) {
-                    index = keyboard(920,158,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击前往
-            click_andshow(random(1013,1177),random(72,124));
-            //关闭地图
-            click_andshow(random(1664,1719),random(26,89));
-            break;
-    }
-}
+// function findIndex(Place,number_X,number_Y) {
+//     switch (Place) {
+//         case PlaceEnum.Ca:
+//             //打开小地图
+//             click_andshow(random(25,99),random(74,132));
+//             //点击X输入框
+//             click_andshow(random(560,653),random(110,171));
+//             //分解
+//             str = number_X.toString();
+//             for (var i=0; i<str.length; i++) {
+//                 index = keyboard(615,198,Number(str[i]));
+//                 click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+//                 //确认键
+//                 if (i == str.length-1) {
+//                     index = keyboard(615,198,255);
+//                     click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+//                 }
+//             }
+//             //点击Y输入框
+//             click_andshow(random(754,845),random(110,171));
+//             //分解
+//             str = number_Y.toString();
+//             for (var i=0; i<str.length; i++) {
+//                 index = keyboard(808,198,Number(str[i]));
+//                 click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+//                 //点击确认键
+//                 if (i == str.length-1) {
+//                     index = keyboard(808,198,255);
+//                     click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+//                 }
+//             }
+//             //点击前往
+//             click_andshow(random(892,1072),random(110,171));
+//             //关闭地图
+//             click_andshow(random(1774,1833),random(66,128));
+//             break;
+//         case PlaceEnum.DTGJ:
+//             //打开小地图
+//             click_andshow(random(25,99),random(74,132));
+//             //点击X输入框
+//             click_andshow(random(675,761),random(72,124));
+//             //分解
+//             str = number_X.toString();
+//             for (var i=0; i<str.length; i++) {
+//                 index = keyboard(727,158,Number(str[i]));
+//                 click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+//                 //确认键
+//                 if (i == str.length-1) {
+//                     index = keyboard(727,158,255);
+//                     click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+//                 }
+//             }
+//             //点击Y输入框
+//             click_andshow(random(872,958),random(72,124));
+//             //分解
+//             str = number_Y.toString();
+//             for (var i=0; i<str.length; i++) {
+//                 index = keyboard(920,158,Number(str[i]));
+//                 click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+//                 //点击确认键
+//                 if (i == str.length-1) {
+//                     index = keyboard(920,158,255);
+//                     click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+//                 }
+//             }
+//             //点击前往
+//             click_andshow(random(1013,1177),random(72,124));
+//             //关闭地图
+//             click_andshow(random(1664,1719),random(26,89));
+//             break;
+//     }
+// }
 // var PlaceEnum = {
 //     JY: 1,          //建邺城
 //     DHW: 2,         //东海湾
