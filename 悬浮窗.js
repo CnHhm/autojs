@@ -973,6 +973,47 @@ function goTo(Place) {
             click_andshow(random(585, 611),random(873, 904));
             click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
             click_andshow(random(97, 111),random(982, 1001));
+            findIndex(PlaceEnum.DTJW,8,48);
+            sleep(random(3000,5000));//3s-5s
+            click_andshow(random(71, 165),random(516, 561));
+            break;
+        case PlaceEnum.MJ:
+            clickItem(1,5,1);//ZZ
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(585, 611),random(873, 904));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(97, 111),random(982, 1001));
+            findIndex(PlaceEnum.DTJW,232,112);
+            sleep(random(38000,43000));//38s-43s
+            click_andshow(random(1306, 1349),random(213, 288));//土地
+            click_andshow(random(1725, 2143),random(349, 445));
+            break;
+        case PlaceEnum.WZ:
+            clickItem(1,1,1);//CA
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            click_andshow(random(454, 486),random(876, 905));
+            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            click_andshow(random(97, 111),random(982, 1001));
+            findIndex(PlaceEnum.DTGJ,5,79);
+            sleep(random(66000,70000));//66s-70s
+            sleep(3000);
+            click_andshow(random(38, 155),random(588, 625));
+            findIndex(PlaceEnum.DTJW,635,76);
+            sleep(random(36000,40000));//36s-40s
+            click_andshow(random(1987, 2091),random(396, 441));
+            break;
+        case PlaceEnum.QLS:
+            toastLog("开发中");
             break;
         default:
             break;
@@ -999,7 +1040,7 @@ function Dig() {
     // 7. 取图
     // 8. 关仓库
     // 9. 去某地
-    goTo(PlaceEnum.STL);
+    goTo(PlaceEnum.WZ);
     // 10. 遍历背包，记录坐标
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
@@ -1198,6 +1239,25 @@ function keyboard(index_X,index_Y,nubmer) {
             // exit();
     }
 }
+// var PlaceEnum = {
+//     JY: 1,          //建邺城
+//     DHW: 2,         //东海湾
+//     JN: 3,          //江南野外
+//     AL:4,           //傲来国
+//     NE:5,           //女儿村
+//     HG:6,           //花果山
+//     DTGJ:7,         //大唐国境
+//     PT:8,           //普陀山
+//     CSJW:9,         //长寿郊外
+//     BJ:10,          //北俱芦洲
+//     ZZ:11,          //朱紫国
+//     STL:12,         //狮驼岭
+//     MJ:13,          //墨家村
+//     WZ:14,          //五庄观
+//     DTJW:15,        //大唐境外
+//     QLS:16,         //麒麟山
+//     Ca:17,          //长安
+// };
 
 /**
  * 根据地点找相对坐标
@@ -1205,40 +1265,24 @@ function keyboard(index_X,index_Y,nubmer) {
  */
 function findIndex(Place,number_X,number_Y) {
     switch (Place) {
-        case PlaceEnum.Ca:
-            //打开小地图
-            click_andshow(random(25,99),random(74,132));
-            //点击X输入框
-            click_andshow(random(560,653),random(110,171));
-            //分解
-            str = number_X.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(615,198,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //确认键
-                if (i == str.length-1) {
-                    index = keyboard(615,198,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击Y输入框
-            click_andshow(random(754,845),random(110,171));
-            //分解
-            str = number_Y.toString();
-            for (var i=0; i<str.length; i++) {
-                index = keyboard(808,198,Number(str[i]));
-                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
-                //点击确认键
-                if (i == str.length-1) {
-                    index = keyboard(808,198,255);
-                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
-                }
-            }
-            //点击前往
-            click_andshow(random(892,1072),random(110,171));
-            //关闭地图
-            click_andshow(random(1774,1833),random(66,128));
+        case PlaceEnum.JY:
             break;
+
+        case PlaceEnum.DHW:
+            break;
+
+        case PlaceEnum.JN:
+            break;
+
+        case PlaceEnum.AL:
+            break;
+
+        case PlaceEnum.NE:
+            break;
+
+        case PlaceEnum.HG:
+            break;
+
         case PlaceEnum.DTGJ:
             //打开小地图
             click_andshow(random(25,99),random(74,132));
@@ -1273,6 +1317,10 @@ function findIndex(Place,number_X,number_Y) {
             //关闭地图
             click_andshow(random(1664,1719),random(26,89));
             break;
+
+        case PlaceEnum.PT:
+                break;
+
         case PlaceEnum.CSJW:
             //打开小地图
             click_andshow(random(25,99),random(74,132));
@@ -1306,6 +1354,76 @@ function findIndex(Place,number_X,number_Y) {
             click_andshow(random(1080,1216),random(151,206));
             //关闭地图
             click_andshow(random(1610,1663),random(109,163));
+            break;
+
+        case PlaceEnum.DTJW:
+            //打开小地图
+            click_andshow(random(25,99),random(74,132));
+            //点击X输入框
+            click_andshow(random(493,572),random(314,363));
+            //分解
+            str = number_X.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(542,400,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //确认键
+                if (i == str.length-1) {
+                    index = keyboard(542,400,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击Y输入框
+            click_andshow(random(685,769),random(314,363));
+            //分解
+            str = number_Y.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(735,400,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //点击确认键
+                if (i == str.length-1) {
+                    index = keyboard(735,400,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击前往
+            click_andshow(random(823,982),random(314,363));
+            //关闭地图
+            click_andshow(random(1851,1901),random(272,324));
+            break;
+
+        case PlaceEnum.Ca:
+            //打开小地图
+            click_andshow(random(25,99),random(74,132));
+            //点击X输入框
+            click_andshow(random(560,653),random(110,171));
+            //分解
+            str = number_X.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(615,198,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //确认键
+                if (i == str.length-1) {
+                    index = keyboard(615,198,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击Y输入框
+            click_andshow(random(754,845),random(110,171));
+            //分解
+            str = number_Y.toString();
+            for (var i=0; i<str.length; i++) {
+                index = keyboard(808,198,Number(str[i]));
+                click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+100));
+                //点击确认键
+                if (i == str.length-1) {
+                    index = keyboard(808,198,255);
+                    click_andshow(random(Number(index.x)+10,Number(index.x)-10+100),random(Number(index.y)+10,Number(index.y)-10+110));
+                }
+            }
+            //点击前往
+            click_andshow(random(892,1072),random(110,171));
+            //关闭地图
+            click_andshow(random(1774,1833),random(66,128));
             break;
     }
 }
