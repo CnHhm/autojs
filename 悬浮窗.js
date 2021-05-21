@@ -302,13 +302,23 @@ threads.start(function stopThread() {
  * 显示点击位置
  * 加了随机延时
  */
-function click_andshow(x,y) {
+function click_andshow(x,y,doubleClick) {
+    doubleClick = typeof doubleClick !== 'undefined' ?  doubleClick : 0;
     click(x,y);
     click_index.setPosition(x,y);
-    sleep(random(300,800));
+    //这个延时为了显示的
+    if (doubleClick) {
+        sleep(random(80,100));
+    } else {
+        sleep(random(300,800));
+    }
     //悬浮窗会遮挡点击
     click_index.setPosition(16,950);
-    sleep(random(300,800));
+    if (doubleClick) {
+        sleep(random(80,100));
+    } else {
+        sleep(random(300,800));
+    }
     
 }
 
@@ -387,7 +397,7 @@ function bagCleanRep() {
     for (var i = 0; i < 5; i++) {//i是列
         for (var j = 0; j < 4; j++) {//j是行
             var img0 = captureScreen();
-            var clip0 = images.clip(img0, packageX, packageY, 127, 127);
+            var clip0 = images.clip(img0, packageX, packageY+39, 127, 127-39);
             var src = images.read("/sdcard/hhmfile/forjudge/repBag/"+i+"-"+j+".png");
             // images.saveImage(clip0, "/sdcard/hhmfile/forjudge/repBag/"+i+"-"+j+".png");
             compareResult = images.getSimilarity(clip0, src, {
@@ -395,10 +405,16 @@ function bagCleanRep() {
             });
             log(i+"-"+j+":"+compareResult);
             if (compareResult < 2.8 || compareResult > 3) {
-                clickItem(j+1,i+1,0);
-                result = findButton(buttonType.save);
-                if (result)
-                click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
+                //双击存入
+                clickItem(j+1,i+1,0,1);
+                clickItem(j+1,i+1,0,1);
+                // result = findButton(buttonType.save);
+                // if (result) {
+                //     //推算数量框的位置，并点击
+                //     click_andshow(random(result.x+391,result.x+391+71),random(result.y,result.y+53));
+                //     log("result.x:"+result.x+",result.y:"+result.y);
+                //     // click_andshow(random(result.x,result.x+229),random(result.y,result.y+53));
+                // }
             }
             clip0.recycle();
             src.recycle();
@@ -473,7 +489,8 @@ function findButton(button) {
  * 点击道具栏
  * 
  */
-function clickItem(row,column,isPackage) {
+function clickItem(row,column,isPackage,doubleClick) {
+    doubleClick = typeof doubleClick !== 'undefined' ?  doubleClick : 0;
     if (isPackage) {
         var deta =131; 
         var verticesX = 1048-deta;
@@ -483,7 +500,7 @@ function clickItem(row,column,isPackage) {
         var verticesX = 1095-deta;
         var verticesY = 315-deta;
     }
-    click_andshow(random(verticesX+column*deta+11,verticesX+column*deta+100),random(verticesY+row*deta+11,verticesY+row*deta+100));
+    click_andshow(random(verticesX+column*deta+11,verticesX+column*deta+100),random(verticesY+row*deta+11,verticesY+row*deta+100),doubleClick);
 }
 
 /**
@@ -1030,7 +1047,7 @@ function goTo(Place) {
 }
 function Dig() {
     log("挖图");
-    // 1.飞到XL
+    // // 1.飞到XL
     // click_andshow(random(1976, 1976+56),random(981, 981+70));
     // clickItem(1,2,1);
     // sleep(random(300,500));
@@ -1042,15 +1059,19 @@ function Dig() {
     // click_andshow(random(1091, 1136),random(176, 263));
     // click_andshow(random(1727, 2139),random(612, 699));
     // 3.清理背包 (找图是可以调参的)
-    // bagCleanRep();
+    bagCleanRep();
     // 4. while(2-16仓库有图) 
+    for (i = 2;i<17;i++) {
+        click_andshow(random(512,628),random(904,944));
+        clickPage(i);
+    }
     // 5. 记下仓库号
     // 6. 取旗子
     // 7. 取图
     // 8. 关仓库
     // 9. 去某地
     // findIndex(PlaceEnum.QLS,179,3);
-    goTo(PlaceEnum.QLS);
+    // goTo(PlaceEnum.QLS);
     // 10. 遍历背包，记录坐标
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
