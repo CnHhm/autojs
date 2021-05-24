@@ -1055,7 +1055,7 @@ function Dig() {
     bagCleanRep();
     // 4. while(2-16仓库有图) 
     if (repRemain.page) {
-        
+
     } else {
         repRemain.page = 5;
     }
@@ -1091,6 +1091,59 @@ function Dig() {
     // 7. 取图
     // 8. 关仓库
     // 9. 去某地
+    switch (page) {
+// var PlaceEnum = {
+//     JY: 1,          
+//     DHW: 2,         
+//     JN: 3,          
+//     AL:4,           
+//     NE:5,           
+//     HG:6,           
+//     DTGJ:7,         
+//     PT:8,           
+//     CSJW:9,         
+//     BJ:10,          
+//     ZZ:11,          
+//     STL:12,         
+//     MJ:13,          
+//     WZ:14,          
+//     DTJW:15,        
+//     QLS:16,         
+//     Ca:17,          //长安
+// };
+        case 2://建邺城
+            break;
+        case 3://东海湾
+            break;
+        case 4://江南野外
+            break;
+        case 5://傲来国
+            break;
+        case 6://女儿村
+            break;
+        case 7://花果山
+            break;
+        case 8://大唐国境
+            break;
+        case 9://普陀山
+            break;
+        case 10://长寿郊外
+            break;
+        case 11://北俱芦洲
+            break;
+        case 12://朱紫国
+            break;
+        case 13://狮驼岭
+            break;
+        case 14://墨家村
+            break;
+        case 15://五庄观
+            break;
+        case 16://大唐境外
+            break;
+        case 17://麒麟山
+            break;
+    }
     // findIndex(PlaceEnum.QLS,179,3);
     // goTo(PlaceEnum.QLS);
     // 10. 遍历背包，记录坐标
