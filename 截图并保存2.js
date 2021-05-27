@@ -55,7 +55,7 @@ function screencapture(){
     var img = captureScreen();
     // var iconForjudge1 = images.clip(img, 566,754, 795-566,807-754);
     // var iconForjudge2 = images.clip(img, 1257,171, 1493-1257,259-171);
-    images.saveImage(img, "/sdcard/hhmfile/AL_flag2.png");
+    images.saveImage(img, "/sdcard/hhmfile/ZZ_flag2.png");
     // images.saveImage(iconForjudge2, "/sdcard/hhmfile/button-on-行囊2.png");
         // src = images.read("/sdcard/hhmfile/长安坐标.png");
         // clip = images.clip(src, 496+147+147+147,250+143+143, 80,80);
