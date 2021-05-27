@@ -102,6 +102,9 @@ WZ:14,          //五庄观
 DTJW:15,        //大唐境外
 QLS:16,         //麒麟山
 Ca:17,          //长安
+Ca_hotel:18,    //长安酒店
+Ca_cargo:19,    //长安杂货店
+Cs:20,          //长寿
 };
 
 function popr(mapTypeEnum,PlaceEnum,axisX,axisY,position)
@@ -547,13 +550,10 @@ function Purchase() {
     log("有"+countEmpty_Bag()+"个空位");
     var remainPosition = countEmpty_Bag();
     // 2.点击长安飞行旗子
-    click_andshow(random(1068, 1154),random(291, 375));
     // 3.点击使用
-    click_andshow(random(725, 725+209),random(605, 605+61));
     // 4.到轿夫处
-    click_andshow(random(1693, 1693+39),random(565, 565+33));
-    //5.关闭道具栏
-    click_andshow(random(1703, 1703+59),random(71, 71+55));
+    // 5.关闭道具栏
+    flyFlag(PlaceEnum.Ca,PlaceEnum.Ca_cargo);
     //6.打开小地图 7. 8.
     findIndex(PlaceEnum.Ca,493,149);
     //9.点击系统->基础->常用设置->查看附近摊位->第一个摊位->更多摊位
@@ -828,6 +828,165 @@ function Sort() {
     // obj.recycle();
     // src.recycle();
 }
+function flyFlag(Place,location) {
+    switch (Place) {
+        case PlaceEnum.Ca:
+            clickItem(1,1,1);
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            sleep(500);
+            switch(location) {
+                case PlaceEnum.DTGJ:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 435,804, 553-435,918-804);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(435+result.x,435+result.x+33),random(804+result.y,804+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+                case PlaceEnum.JN:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 1657,846, 1794-1657,918-846);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(1657+result.x,1657+result.x+33),random(846+result.y,846+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+                case PlaceEnum.Ca_hotel:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 1510,453, 1636-1510,523-453);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(1510+result.x,1510+result.x+33),random(453+result.y,453+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+                case PlaceEnum.Ca_cargo:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 1636,519, 1776-1636,631-519);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(1636+result.x,1636+result.x+33),random(519+result.y,519+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+            }
+            break;
+        case PlaceEnum.AL:
+            clickItem(1,3,1);
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            sleep(500);
+            switch(location) {
+                case PlaceEnum.NE:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 596,210, 740-596,318-210);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(596+result.x,596+result.x+33),random(210+result.y,210+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+                case PlaceEnum.HG:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 1499,210, 1621-1499,318-210);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(1499+result.x,1499+result.x+33),random(210+result.y,210+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+                case PlaceEnum.DHW:
+                    var img = captureScreen();
+                    var clip = images.clip(img, 1291,778, 1483-1291,892-778);
+                    src = images.read("/sdcard/hhmfile/forjudge/flagRedPoint.png");
+                    var result = images.findImage(clip, src); //找使用的位置
+                    clip.recycle();
+                    src.recycle();
+                    if (result) {
+                        log("result:"+result);
+                        click_andshow(random(1291+result.x,1291+result.x+33),random(778+result.y,778+result.y+29))
+                    } else {
+                        log("not find redpoint!");
+                    }
+                    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                    break;
+            }
+            break;
+        case PlaceEnum.Cs:
+            clickItem(1,4,1);
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            sleep(500);
+            switch(location) {
+                
+            }
+            break;
+        case PlaceEnum.ZZ:
+            clickItem(1,5,1);
+            result = findButton(buttonType.use);
+            if (result) {
+                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
+            } else {
+                log("find button error!");
+            }
+            sleep(500);
+            switch(location) {
+                
+            }
+            break;
+    }
+}
 
 function goTo(Place) {
     click_andshow(random(1976, 1976+56),random(981, 981+70));
@@ -844,28 +1003,14 @@ function goTo(Place) {
             click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
             break;
         case PlaceEnum.DHW:
-            clickItem(1,3,1);//AL
-            result = findButton(buttonType.use);
-            if (result) {
-                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-            } else {
-                log("find button error!");
-            }
-            click_andshow(random(1350, 1383),random(813, 842));
-            click_andshow(random(1703, 1703+59),random(71, 71+55));//关闭道具栏
+            flyFlag(PlaceEnum.AL,PlaceEnum.DHW);
+            findIndex(PlaceEnum.AL,169,16);
+            sleep(random(1000,1300));
             click_andshow(random(1049, 1089),random(468, 533));//点驿站
             click_andshow(random(1731, 2142),random(479, 573));//我要去
             break;
         case PlaceEnum.JN:
-            clickItem(1,1,1);//CA
-            result = findButton(buttonType.use);
-            if (result) {
-                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-            } else {
-                log("find button error!");
-            }
-            click_andshow(random(1738, 1768),random(876, 905));
-            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            flyFlag(PlaceEnum.Ca,PlaceEnum.JN);
             findIndex(PlaceEnum.Ca,541,3);
             sleep(random(500,1000));
             click_andshow(random(2105, 2166),random(973, 1033));//收起扩展
@@ -884,43 +1029,19 @@ function goTo(Place) {
             click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
             break;
         case PlaceEnum.NE:
-            clickItem(1,3,1);//AL
-            result = findButton(buttonType.use);
-            if (result) {
-                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-            } else {
-                log("find button error!");
-            }
-            click_andshow(random(615, 646),random(249, 278));
-            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            flyFlag(PlaceEnum.AL,PlaceEnum.NE);
             findIndex(PlaceEnum.AL,7,140);
             sleep(random(500,1000));
             click_andshow(random(139, 247),random(308, 348));
             break;
         case PlaceEnum.HG:
-            clickItem(1,3,1);//AL
-            result = findButton(buttonType.use);
-            if (result) {
-                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-            } else {
-                log("find button error!");
-            }
-            click_andshow(random(1550, 1583),random(247, 272));
-            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            flyFlag(PlaceEnum.AL,PlaceEnum.HG);
             findIndex(PlaceEnum.AL,213,141);
             sleep(random(500,1000));
             click_andshow(random(1882, 1972),random(172, 210));
             break;
         case PlaceEnum.DTGJ:
-            clickItem(1,1,1);//CA
-            result = findButton(buttonType.use);
-            if (result) {
-                click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
-            } else {
-                log("find button error!");
-            }
-            click_andshow(random(454, 486),random(876, 905));
-            click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+            flyFlag(PlaceEnum.Ca,PlaceEnum.DTGJ);
             findIndex(PlaceEnum.Ca,12,3);
             sleep(random(500,1000));
             click_andshow(random(97, 111),random(982, 1001));
@@ -1056,7 +1177,10 @@ function goTo(Place) {
     }
 }
 function Dig() {
-    goTo(PlaceEnum.WZ);
+    // flyFlag(PlaceEnum.Ca,PlaceEnum.DTGJ);
+    goTo(PlaceEnum.NE);
+    goTo(PlaceEnum.HG);
+    goTo(PlaceEnum.DHW);
     AutochangeState(stateType.Stop);
 }
 // function Dig() {
