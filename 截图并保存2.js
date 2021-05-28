@@ -96,6 +96,13 @@ function compare() {
     img1.recycle();
     img2.recycle();
 }
+function test() {
+var patt1=/[)]/;
+var str = "(12,56)";
+a = str.search(patt1);
+log(a);
+}
 // compare();
 screencapture();
+// test();
 log("finsh;");

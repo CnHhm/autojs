@@ -1202,7 +1202,7 @@ function Dig() {
             compareResult = images.getSimilarity(clip0, src, {
                 "type": "MSSIM"
             });
-            log(i+"-"+j+"result:"+compareResult);
+            // log(i+"-"+j+"result:"+compareResult);
             src.recycle();
             clip0.recycle();            
             if (compareResult > 2.8 && compareResult < 3) {
@@ -1301,8 +1301,19 @@ function Dig() {
                 var wordResult=logOcr.words_result;
                 //wordResult[0].words用于判断是不是宝图
                 //wordResult[3].words记录了地点和坐标
-                log("number:"+logOcr.words_result_num);
-                log("wordResult3:"+wordResult[3]);
+                log("wordResult3:"+wordResult[3].words);
+                var str = wordResult[3].words;
+                var patt1=/[(]/;
+                var fontIndex = str.search(patt1);
+                var patt2=/[,]/;
+                var midIndex = str.search(patt2);
+                var patt3=/[)]/;
+                var rearIndex = str.search(patt3);
+                var xAxis = str.slice(fontIndex+1,midIndex);
+                var yAxis = str.slice(midIndex+1,rearIndex);
+                click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+                findIndex(place,xAxis,yAxis);
+                log("axis:"+xAxis+"|"+yAxis+";");
                 // result = findButton(buttonType.use);
                 // if (result) {
                 //     click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
