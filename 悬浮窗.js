@@ -1314,6 +1314,22 @@ function Dig() {
                 click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
                 findIndex(place,xAxis,yAxis);
                 log("axis:"+xAxis+"|"+yAxis+";");
+                //用坐标变动判断是否还在行走
+                isMove();
+                click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
+                clickItem(j+1,i+1,1);
+
+                result = findButton(buttonType.use);
+                if (result) {
+                    click_index.setPosition(result.x,result.y);
+                    //这个延时为了显示的
+                    sleep(random(1300,200));
+                    //悬浮窗会遮挡点击
+                    click_index.setPosition(16,950);
+                } else {
+                    log("find button error!");
+                }
+                
                 // result = findButton(buttonType.use);
                 // if (result) {
                 //     click_andshow(random(result.x,result.x+200),random(result.y,result.y+50));
@@ -1328,6 +1344,7 @@ function Dig() {
             packageX++;
         }
     }
+    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
 
@@ -1351,6 +1368,24 @@ function Dig() {
     AutochangeState(stateType.Stop);
 }
 
+function isMove() {
+    while(1) {
+        var img = captureScreen();
+        var clip = images.clip(img, 130, 100, 304-130, 140-100);
+        sleep(3000);
+        var img2 = captureScreen();
+        var clip2 = images.clip(img2, 130, 100, 304-130, 140-100);
+        compareResult = images.getSimilarity(clip, clip2, {
+            "type": "MSSIM"
+        });
+        clip2.recycle();
+        clip.recycle();
+        if (compareResult > 2.8 && compareResult < 3) {
+            return true;
+        } else {
+        }
+    }
+}
 function changeState(stateType_input) {
     State = stateType_input;
 }
