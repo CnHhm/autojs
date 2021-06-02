@@ -1345,6 +1345,7 @@ function Dig() {
         }
     }
     click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+    //you need work harder
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
 
