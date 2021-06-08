@@ -1345,10 +1345,7 @@ function Dig() {
     // }
     // click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
     addBlood(1);
-    isMove();
-    click_andshow(random(1217,1328),random(399,478));//进酒店
-    click_andshow(random(35,81),random(364,408));//屏蔽玩家
-    click_andshow(1532,315);//走到酒店老板旁
+
     // 11. 打开小地图输入坐标
     // 12. 到地点->使用宝图
 
@@ -1395,8 +1392,34 @@ function addBlood(obj) {
     if (obj == 1) {//人
         click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
         flyFlag(PlaceEnum.Ca,PlaceEnum.Ca_hotel);
-        findIndex(PlaceEnum.Ca,464,168);
-
+        // findIndex(PlaceEnum.Ca,464,168);
+        isMove();
+        click_andshow(random(1217,1328),random(399,478));//进酒店
+        sleep(1000);
+        click_andshow(random(35,81),random(364,408));//屏蔽玩家
+        click_andshow(1532,315);//走到酒店老板旁
+        isMove();
+        click_andshow(random(32,105),random(979,1033));//返回->这里的没有生效，但是出奇的不影响正常点击
+        click_andshow(random(35,81),random(364,408));//屏蔽玩家
+        do {
+            click_andshow(random(1370,1392),random(406,419),1);//点老板
+            sleep(1000);
+            var img = captureScreen();
+            var clip = images.clip(img, 1718,471, 2154-1718,584-471);
+            var src = images.read("/sdcard/hhmfile/forjudge/checkin.png");
+            compareResult = images.getSimilarity(clip, src, {
+                "type": "MSSIM"
+            });
+            log("result:"+compareResult);
+            clip.recycle();
+            src.recycle();
+        }
+        while(compareResult < 2.8 || compareResult > 3);
+        click_andshow(random(1818,2054),random(500,560));
+        click_andshow(random(1818,2054),random(500,560));
+        // click_andshow(1359,406);//点老板
+        // click_andshow(random(1370,1392),random(406,419),1);//点老板
+        // click_andshow(random(1370,1392),random(406,419),1);//点老板
     } else { //宠物
 
     }
