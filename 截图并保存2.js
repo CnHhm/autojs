@@ -53,9 +53,10 @@ function screencapture(){
     }
     sleep(3000);
     var img = captureScreen();
-    var iconForjudge1 = images.clip(img, 1718,471, 2154-1718,584-471);
+    var iconForjudge1 = images.clip(img, 1312,685, 1544-1312,754-685);
     // var iconForjudge2 = images.clip(img, 1257,171, 1493-1257,259-171);
-    images.saveImage(iconForjudge1, "/sdcard/hhmfile/forjudge/checkin2.png");
+    images.saveImage(iconForjudge1, "/sdcard/hhmfile/forjudge/button-查看附近摊位2.png");
+    iconForjudge1.recycle();
     // images.saveImage(iconForjudge2, "/sdcard/hhmfile/button-on-行囊2.png");
         // src = images.read("/sdcard/hhmfile/长安坐标.png");
         // clip = images.clip(src, 496+147+147+147,250+143+143, 80,80);
