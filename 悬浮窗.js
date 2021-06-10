@@ -537,9 +537,12 @@ function Init() {
     AutochangeState(stateType.Start);
 }
 
+var incenseTime_old;//记录初次使用摄药香的时间
 function Start() {
+    incenseTime_old = useIncense();
     AutochangeState(stateType.Purchase);
 }
+
 function Purchase() {
     log("买宝图");
     //去买宝图的地方 1.点击道具栏 2.点击长安飞行旗子 3.点击使用 4.到轿夫处 5.关闭道具栏 6.打开小地图 7.输入坐标(493,149)点击前往 
@@ -1175,20 +1178,10 @@ function goTo(Place) {
             break;
     }
 }
-// function Dig() {
-//     // flyFlag(PlaceEnum.Ca,PlaceEnum.DTGJ);
-//     goTo(PlaceEnum.ZZ);
-//     sleep(1000);
-//     goTo(PlaceEnum.STL);
-//     sleep(1000);
-//     goTo(PlaceEnum.MJ);
-//     AutochangeState(stateType.Stop);
-// }
+
 function Dig() {
     log("挖图");
-    //记得用摄妖香
-    //吃个摄妖香，开启30min定时
-    useIncense();
+    
     // // 1.飞到XL
     // click_andshow(random(1976, 1976+56),random(981, 981+70));
     // clickItem(1,2,1);
@@ -1364,6 +1357,8 @@ function Dig() {
     // }
     // click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
     useIncense();
+    if ( Date().getTime() - )
+    //记得用摄妖香
     // addBlood(1);
 
     // 11. 打开小地图输入坐标
@@ -1398,36 +1393,38 @@ function useIncense() {
     } else {
         log("button not found");
     }
+    click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
+    return Date().getTime();
 }
 
-var useIncense = (function () {
-    var Time = new Object(true);
-    Time.new =  new Date().getTime();
-    click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
-    clickItem(2,1,1);
-    result = findButton(buttonType.use);
-    if(result) {
-        click_andshow(random(result.x,result.x+180),random(result.y,result.y+47));
-    } else {
-        log("button not found");
-    }
-    return function () {
-        Time.old = Time.new;
-        Time.new = new Date().getTime();
-        if( (Time.new-Time.old) > 60000 ) {//超过30min 1800000
-            log("timeup");
-            click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
-            clickItem(2,1,1);
-            result = findButton(buttonType.use);
-            if(result) {
-                click_andshow(random(result.x,result.x+180),random(result.y,result.y+47));
-            } else {
-                log("button not found");
-            }
-        }
-        return Time;
-    }
-})();
+// var useIncense = (function () {
+//     var Time = new Object(true);
+//     Time.new =  new Date().getTime();
+//     click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
+//     clickItem(2,1,1);
+//     result = findButton(buttonType.use);
+//     if(result) {
+//         click_andshow(random(result.x,result.x+180),random(result.y,result.y+47));
+//     } else {
+//         log("button not found");
+//     }
+//     return function () {
+//         Time.old = Time.new;
+//         Time.new = new Date().getTime();
+//         if( (Time.new-Time.old) > 60000 ) {//超过30min 1800000
+//             log("timeup");
+//             click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
+//             clickItem(2,1,1);
+//             result = findButton(buttonType.use);
+//             if(result) {
+//                 click_andshow(random(result.x,result.x+180),random(result.y,result.y+47));
+//             } else {
+//                 log("button not found");
+//             }
+//         }
+//         return Time;
+//     }
+// })();
 
 function clickAndCheck(buttonName,x,y,imagePath,x_begin,y_begin,deta_x,deta_y) {
     //为了防止点击失效造成的程序逻辑奔溃，这里新增一个点击检查功能
