@@ -534,11 +534,12 @@ function Init() {
 //Init all state flag
     auto.waitFor();//等待开启无障碍模式
     var instanceRequestScreenCap = new RequestScreenCap();// 请求屏幕截图权限
-    AutochangeState(stateType.Start);
+    changeState(stateType.Start);
 }
 
 var incenseTime_old;//记录初次使用摄药香的时间
 function Start() {
+    log("start");
     incenseTime_old = useIncense();
     AutochangeState(stateType.Purchase);
 }
@@ -1356,8 +1357,9 @@ function Dig() {
     //     }
     // }
     // click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
-    useIncense();
-    if ( Date().getTime() - )
+    if ( (new Date().getTime() - incenseTime_old) > 60*1000*30 ) {
+        incenseTime_old = useIncense();
+    }
     //记得用摄妖香
     // addBlood(1);
 
@@ -1385,6 +1387,7 @@ function Dig() {
 }
 //闭包是赋值操作，所以没有截屏权限还是得申请一个全局变量记录时间
 function useIncense() {
+    log("useIncense");
     click_andshow(random(1976, 1976+56),random(981, 981+70));//打开道具栏
     clickItem(2,1,1);
     result = findButton(buttonType.use);
@@ -1394,7 +1397,8 @@ function useIncense() {
         log("button not found");
     }
     click_andshow(random(1699, 1761),random(73, 130));//关闭道具栏
-    return Date().getTime();
+    var time = new Date().getTime();
+    return time;
 }
 
 // var useIncense = (function () {
